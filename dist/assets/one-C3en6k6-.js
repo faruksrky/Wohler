@@ -1,0 +1,1 @@
+import{j as e,H as t,C as i}from"./index-CdzOVLdX.js";import{B as a}from"./view-Dslu2IVT.js";const r={title:`Müşteri Teknik Servis Bilgileri | Dashboard - ${i.appName}`};function n(){return e.jsxs(e.Fragment,{children:[e.jsx(t,{children:e.jsxs("title",{children:[" ",r.title]})}),e.jsx(a,{title:"Page one"})]})}export{n as default};
