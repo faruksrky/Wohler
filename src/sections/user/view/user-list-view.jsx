@@ -1,29 +1,24 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import axios from 'axios';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useSetState } from 'src/hooks/use-set-state';
 
 import { varAlpha } from 'src/theme/styles';
+import { _roles, USER_STATUS_OPTIONS } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
-import { _roles, _userList, USER_STATUS_OPTIONS } from 'src/_mock';
 
 import { Label } from 'src/components/label';
-import { toast } from 'src/components/snackbar';
-import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
@@ -48,12 +43,28 @@ import { UserTableFiltersResult } from '../user-table-filters-result';
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name' },
-  { id: 'phoneNumber', label: 'Phone number', width: 180 },
-  { id: 'company', label: 'Company', width: 220 },
-  { id: 'role', label: 'Role', width: 180 },
-  { id: 'status', label: 'Status', width: 100 },
-  { id: '', width: 88 },
+  { id: 'id', label: 'ID', width: 90 },
+  { id: 'customerFirstName', label: 'First Name', width: 150 },
+  { id: 'customerLastName', label: 'Last Name', width: 150 },
+  { id: 'phoneNumber', label: 'Phone Number', width: 150 },
+  { id: 'emailAddress', label: 'Email Address', width: 200 },
+  { id: 'address', label: 'Address', width: 250 },
+  { id: 'productName', label: 'Product Name', width: 150 },
+  { id: 'model', label: 'Model', width: 120 },
+  { id: 'serialNumber', label: 'Serial Number', width: 150 },
+  { id: 'purchaseDate', label: 'Purchase Date', width: 150 },
+  { id: 'faultDescription', label: 'Fault Description', width: 250 },
+  { id: 'faultDate', label: 'Fault Date', width: 150 },
+  { id: 'preliminaryDiagnosis', label: 'Preliminary Diagnosis', width: 250 },
+  { id: 'servicePersonnel', label: 'Service Personnel', width: 150 },
+  { id: 'operationDate', label: 'Operation Date', width: 150 },
+  { id: 'performedOperations', label: 'Performed Operations', width: 250 },
+  { id: 'replacedParts', label: 'Replaced Parts', width: 250 },
+  { id: 'warrantyStatus', label: 'Warranty Status', width: 150 },
+  { id: 'paymentStatus', label: 'Payment Status', width: 150 },
+  { id: 'serviceCompletionStatus', label: 'Service Completion Status', width: 250 },
+  { id: 'deliveryDate', label: 'Delivery Date', width: 150 },
+  { id: 'notes', label: 'Notes', width: 300 },
 ];
 
 // ----------------------------------------------------------------------
@@ -65,9 +76,23 @@ export function UserListView() {
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState(_userList);
+  const [tableData, setTableData] = useState([]);
 
-  const filters = useSetState({ name: '', role: [], status: 'all' });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/service-requests');
+        setTableData(Array.isArray(response.data) ? response.data : []);
+      } catch (error) {
+        console.error('Error fetching data', error);
+        setTableData([]);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const filters = useSetState({ customerFirstName: '', customerLastName: '', role: [], status: 'all' });
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -78,42 +103,12 @@ export function UserListView() {
   const dataInPage = rowInPage(dataFiltered, table.page, table.rowsPerPage);
 
   const canReset =
-    !!filters.state.name || filters.state.role.length > 0 || filters.state.status !== 'all';
+    !!filters.state.customerFirstName || 
+    !!filters.state.customerLastName || 
+    filters.state.role.length > 0 || 
+    filters.state.status !== 'all';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
-
-  const handleDeleteRow = useCallback(
-    (id) => {
-      const deleteRow = tableData.filter((row) => row.id !== id);
-
-      toast.success('Delete success!');
-
-      setTableData(deleteRow);
-
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, tableData]
-  );
-
-  const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
-
-    toast.success('Delete success!');
-
-    setTableData(deleteRows);
-
-    table.onUpdatePageDeleteRows({
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, tableData]);
-
-  const handleEditRow = useCallback(
-    (id) => {
-      router.push(paths.dashboard.user.edit(id));
-    },
-    [router]
-  );
 
   const handleFilterStatus = useCallback(
     (event, newValue) => {
@@ -133,16 +128,6 @@ export function UserListView() {
             { name: 'User', href: paths.dashboard.user.root },
             { name: 'List' },
           ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={paths.dashboard.user.new}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New user
-            </Button>
-          }
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 
@@ -210,13 +195,6 @@ export function UserListView() {
                   dataFiltered.map((row) => row.id)
                 )
               }
-              action={
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={confirm.onTrue}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                </Tooltip>
-              }
             />
 
             <Scrollbar>
@@ -248,8 +226,6 @@ export function UserListView() {
                         row={row}
                         selected={table.selected.includes(row.id)}
                         onSelectRow={() => table.onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.id)}
                       />
                     ))}
 
@@ -261,6 +237,7 @@ export function UserListView() {
                   <TableNoData notFound={notFound} />
                 </TableBody>
               </Table>
+       
             </Scrollbar>
           </Box>
 
@@ -279,31 +256,21 @@ export function UserListView() {
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {table.selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows();
-              confirm.onFalse();
-            }}
-          >
-            Delete
-          </Button>
-        }
       />
     </>
   );
 }
 
 function applyFilter({ inputData, comparator, filters }) {
-  const { name, status, role } = filters;
+  const { customerFirstName, customerLastName, status, role } = filters;
+
+  // inputData'nın bir dizi olup olmadığını kontrol edin
+  if (!Array.isArray(inputData)) {
+    console.error('inputData is not an array:', inputData);
+    return [];
+  }
+
+  console.log('Before filtering:', inputData);
 
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
@@ -315,9 +282,15 @@ function applyFilter({ inputData, comparator, filters }) {
 
   inputData = stabilizedThis.map((el) => el[0]);
 
-  if (name) {
+  if (customerFirstName) {
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (user) => user.customerFirstName.toLowerCase().includes(customerFirstName.toLowerCase())
+    );
+  }
+
+  if (customerLastName) {
+    inputData = inputData.filter(
+      (user) => user.customerLastName.toLowerCase().includes(customerLastName.toLowerCase())
     );
   }
 
@@ -331,3 +304,5 @@ function applyFilter({ inputData, comparator, filters }) {
 
   return inputData;
 }
+
+

@@ -194,13 +194,7 @@ export function UserNewEditForm({ currentUser }) {
               sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
             />
 
-            {currentUser && (
-              <Stack justifyContent="center" alignItems="center" sx={{ mt: 3 }}>
-                <Button variant="soft" color="error">
-                  Delete user
-                </Button>
-              </Stack>
-            )}
+            {currentUser}
           </Card>
         </Grid>
 

@@ -1,9 +1,7 @@
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
+
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
@@ -15,19 +13,15 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
-import { UserQuickEditForm } from './user-quick-edit-form';
 
 // ----------------------------------------------------------------------
 
-export function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
+export function UserTableRow({ row, selected, onSelectRow }) {
   const confirm = useBoolean();
 
   const popover = usePopover();
-
-  const quickEdit = useBoolean();
 
   return (
     <>
@@ -41,9 +35,6 @@ export function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRo
             <Avatar alt={row.name} src={row.avatarUrl} />
 
             <Stack sx={{ typography: 'body2', flex: '1 1 auto', alignItems: 'flex-start' }}>
-              <Link color="inherit" onClick={onEditRow} sx={{ cursor: 'pointer' }}>
-                {row.name}
-              </Link>
               <Box component="span" sx={{ color: 'text.disabled' }}>
                 {row.email}
               </Box>
@@ -51,11 +42,27 @@ export function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRo
           </Stack>
         </TableCell>
 
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.customerFirstName}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.customerLastName}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.phoneNumber}</TableCell>
-
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.company}</TableCell>
-
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.role}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.emailAddress}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.address}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.productName}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.model}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.serialNumber}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.purchaseDate}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.faultDescription}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.faultDate}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.preliminaryDiagnosis}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.servicePersonnel}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.operationDate}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.performedOperations}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.replacedParts}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.warrantyStatus}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.paymentStatus}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.serviceCompletionStatus}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.deliveryDate}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.notes}</TableCell>
 
         <TableCell>
           <Label
@@ -70,34 +77,18 @@ export function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRo
             {row.status}
           </Label>
         </TableCell>
-
-        <TableCell>
-          <Stack direction="row" alignItems="center">
-            <Tooltip title="Quick Edit" placement="top" arrow>
-              <IconButton
-                color={quickEdit.value ? 'inherit' : 'default'}
-                onClick={quickEdit.onTrue}
-              >
-                <Iconify icon="solar:pen-bold" />
-              </IconButton>
-            </Tooltip>
-
-            <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-              <Iconify icon="eva:more-vertical-fill" />
-            </IconButton>
-          </Stack>
-        </TableCell>
       </TableRow>
 
-      <UserQuickEditForm currentUser={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
-
+{/*
       <CustomPopover
         open={popover.open}
         anchorEl={popover.anchorEl}
         onClose={popover.onClose}
         slotProps={{ arrow: { placement: 'right-top' } }}
       >
+        {/*
         <MenuList>
+          
           <MenuItem
             onClick={() => {
               confirm.onTrue();
@@ -106,32 +97,12 @@ export function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRo
             sx={{ color: 'error.main' }}
           >
             <Iconify icon="solar:trash-bin-trash-bold" />
-            Delete
-          </MenuItem>
-
-          <MenuItem
-            onClick={() => {
-              onEditRow();
-              popover.onClose();
-            }}
-          >
-            <Iconify icon="solar:pen-bold" />
-            Edit
+        
           </MenuItem>
         </MenuList>
+          
       </CustomPopover>
-
-      <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="Delete"
-        content="Are you sure want to delete?"
-        action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Delete
-          </Button>
-        }
-      />
+      */}
     </>
   );
 }

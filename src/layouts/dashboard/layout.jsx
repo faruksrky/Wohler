@@ -140,7 +140,8 @@ export function DashboardLayout({ sx, children, header, data }) {
               <Box display="flex" alignItems="center" gap={{ xs: 0, sm: 0.75 }}>
                 {/* -- Searchbar -- */}
                 <Searchbar data={navData} />
-                {/* -- Language popover -- */}
+                {/* -- Language popover -- 
+
                 <LanguagePopover
                   data={[
                     { value: 'en', label: 'English', countryCode: 'GB' },
@@ -150,14 +151,23 @@ export function DashboardLayout({ sx, children, header, data }) {
                     { value: 'ar', label: 'Arabic', countryCode: 'SA' },
                   ]}
                 />
-                {/* -- Notifications popover -- */}
+  
+                {/* -- Notifications popover 
                 <NotificationsDrawer data={_notifications} />
+                
                 {/* -- Contacts popover -- */}
+                {/* 
                 <ContactsPopover data={_contacts} />
-                {/* -- Settings button -- */}
-                <SettingsButton />
+                */}
+              
                 {/* -- Account drawer -- */}
+                {/* 
                 <AccountDrawer data={_account} />
+              */}
+
+                  {/* -- Settings button -- */}
+                  <SettingsButton />
+
               </Box>
             ),
           }}
