@@ -5,9 +5,9 @@ import { CONFIG } from 'src/config-global';
 export const _workspaces = [
   {
     id: 'team-1',
-    name: 'Team 1',
-    logo: `${CONFIG.assetsDir}/assets/icons/workspaces/logo-1.webp`,
-    plan: 'Free',
+    name: 'Direct Nexus',
+    logo: `${CONFIG.assetsDir}/assets/icons/workspaces/logo-2.webp`,
+    plan: 'Pro',
   },
   /*
   {

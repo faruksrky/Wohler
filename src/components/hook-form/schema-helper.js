@@ -11,14 +11,14 @@ export const schemaHelper = {
   phoneNumber: (props) =>
     zod
       .string({
-        required_error: props?.message?.required_error ?? 'Phone number is required!',
-        invalid_type_error: props?.message?.invalid_type_error ?? 'Invalid phone number!',
+        required_error: props?.message?.required_error ?? 'Telefon bilgisi gereklidir!',
+        invalid_type_error: props?.message?.invalid_type_error ?? 'Geçersiz telefon numarası!',
       })
       .min(1, {
-        message: props?.message?.required_error ?? 'Phone number is required!',
+        message: props?.message?.required_error ?? 'Telefon bilgisi gereklidir!!',
       })
       .refine((data) => props?.isValidPhoneNumber?.(data), {
-        message: props?.message?.invalid_type_error ?? 'Invalid phone number!',
+        message: props?.message?.invalid_type_error ?? 'Geçersiz telefon numarası!',
       }),
   /**
    * Date

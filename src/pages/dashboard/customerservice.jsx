@@ -2,20 +2,20 @@ import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from 'src/config-global';
 
-import { UserCardsView } from 'src/sections/user/view';
+import { CustomerServiceListView } from 'src/sections/customerService/customerservice-list-view';
 
 // ----------------------------------------------------------------------
 
-const metadata = { title: `User cards | Dashboard - ${CONFIG.appName}` };
+const metadata = { title: `Müşteri Servis Listesi | Dashboard - ${CONFIG.appName}` };
 
 export default function Page() {
   return (
     <>
       <Helmet>
-        <title> {metadata.title}</title>
+        <title>{metadata.title}</title>
       </Helmet>
 
-      <UserCardsView />
+      <CustomerServiceListView />
     </>
   );
 }

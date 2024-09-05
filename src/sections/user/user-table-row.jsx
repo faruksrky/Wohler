@@ -64,19 +64,6 @@ export function UserTableRow({ row, selected, onSelectRow }) {
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.deliveryDate}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.notes}</TableCell>
 
-        <TableCell>
-          <Label
-            variant="soft"
-            color={
-              (row.status === 'active' && 'success') ||
-              (row.status === 'pending' && 'warning') ||
-              (row.status === 'banned' && 'error') ||
-              'default'
-            }
-          >
-            {row.status}
-          </Label>
-        </TableCell>
       </TableRow>
 
 {/*

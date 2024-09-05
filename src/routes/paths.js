@@ -1,4 +1,6 @@
+import { _id, _postTitles } from 'src/_mock/assets';
 // ----------------------------------------------------------------------
+
 
 const ROOTS = {
   AUTH: '/auth',
@@ -6,7 +8,7 @@ const ROOTS = {
 };
 
 // ----------------------------------------------------------------------
-
+const MOCK_ID = _id[1];
 export const paths = {
   faqs: '/faqs',
   minimalStore: 'https://mui.com/store/items/minimal-dashboard/',
@@ -43,8 +45,16 @@ export const paths = {
   // DASHBOARD
   dashboard: {
     root: ROOTS.DASHBOARD,
-    two: `${ROOTS.DASHBOARD}/two`,
-    user: { root: `${ROOTS.DASHBOARD}/user`, list: `${ROOTS.DASHBOARD}/user/list` },
+    customerservice: `${ROOTS.DASHBOARD}/customerservice`,
+    user: {
+      root: `${ROOTS.DASHBOARD}/user`,
+      new: `${ROOTS.DASHBOARD}/user/new`,
+      list: `${ROOTS.DASHBOARD}/user/list`,
+      edit: (id) => `${ROOTS.DASHBOARD}/user/${id}/edit`,
+      demo: {
+        edit: `${ROOTS.DASHBOARD}/user/${MOCK_ID}/edit`,
+      },
+    },
     group: {
       root: `${ROOTS.DASHBOARD}/group`,
     },

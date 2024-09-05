@@ -130,10 +130,7 @@ export function DashboardLayout({ sx, children, header, data }) {
                   />
                 )}
                 {/* -- Workspace popover -- */}
-                <WorkspacesPopover
-                  data={_workspaces}
-                  sx={{ color: 'var(--layout-nav-text-primary-color)' }}
-                />
+                
               </>
             ),
             rightArea: (
@@ -204,11 +201,11 @@ export function DashboardLayout({ sx, children, header, data }) {
         '--layout-transition-easing': 'linear',
         '--layout-transition-duration': '120ms',
         '--layout-nav-mini-width': '88px',
-        '--layout-nav-vertical-width': '300px',
+        '--layout-nav-vertical-width': '250px',
         '--layout-nav-horizontal-height': '64px',
         '--layout-dashboard-content-pt': theme.spacing(1),
         '--layout-dashboard-content-pb': theme.spacing(8),
-        '--layout-dashboard-content-px': theme.spacing(5),
+        '--layout-dashboard-content-px': theme.spacing(2),
       }}
       sx={{
         [`& .${layoutClasses.hasSidebar}`]: {

@@ -47,38 +47,25 @@ export const navData = [
   {
     subheader: 'direct',
     items: [
-      { title: 'Teknik Servis', path: paths.dashboard.root, icon: ICONS.technicalService },
-      { title: 'Kullanıcı', path: paths.dashboard.user.list, icon: ICONS.user },
-      { title: 'Two', path: paths.dashboard.two, icon: ICONS.ecommerce },
+      { title: 'Teknik Servis', path: paths.dashboard.customerservice, icon: ICONS.technicalService },
     ],
   },
-  /**
-   * Management
-   */
-  /*
+
   {
-    subheader: 'Management',
     items: [
       {
-        title: 'Group',
-        path: paths.dashboard.group.root,
-        icon: ICONS.user,
-        children: [
-          { title: 'Four', path: paths.dashboard.group.root },
-          { title: 'Five', path: paths.dashboard.group.five },
-          { title: 'Six', path: paths.dashboard.group.six },
-        ],
-      },
-      /*
-      {
-        title: 'User',
+        title: 'Kullanıcı',
         path: paths.dashboard.user.root,
         icon: ICONS.user,
-        children: [{ title: 'List', path: paths.dashboard.user.root }],
+        children: [
+          { title: 'Liste', path: paths.dashboard.user.list },
+          { title: 'Yeni Kullanıcı', path: paths.dashboard.user.new },
+          { title: 'Güncelle', path: paths.dashboard.user.demo.edit },
+        ],
       },
       
     ],
     
   },
-  */
+  
 ];

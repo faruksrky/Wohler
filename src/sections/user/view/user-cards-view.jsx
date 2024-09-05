@@ -30,7 +30,7 @@ export function UserCardsView() {
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
-            New user
+            Yeni Kullanıcı
           </Button>
         }
         sx={{ mb: { xs: 3, md: 5 } }}
