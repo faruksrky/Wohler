@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { z as zod } from 'zod';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
@@ -24,20 +25,15 @@ import { Form, Field, schemaHelper } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export const NewUserSchema = zod.object({
-  avatarUrl: schemaHelper.file({
-    message: { required_error: 'Avatar gerekli!' },
-  }),
-  firstname: zod.string().min(1, { message: 'Ad bilgisi gereklidir!' }),
-  lastname: zod.string().min(1, { message: 'Soyad bilgisi gereklidir!' }),
+  userName: zod.string().min(1, { message: 'Kullanıcı adı bilgisi gereklidir!' }),
+  firstName: zod.string().min(1, { message: 'Ad bilgisi gereklidir!' }),
+  lastName: zod.string().min(1, { message: 'Soyad bilgisi gereklidir!' }),
   email: zod
     .string()
     .min(1, { message: 'Email bilgisi gereklidir!' })
     .email({ message: 'Geçerli bir mail adresi girilmelidir!' }),
   phoneNumber: schemaHelper.phoneNumber({ isValidPhoneNumber }),
-  role: zod.string().min(1, { message: 'Role bilgisi gereklidir!' }),
-  // Not required
-  status: zod.string(),
-  isVerified: zod.boolean(),
+  password: zod.string().min(6, { message: 'Şifre en az 6 karakter uzunluğunda olmalıdır!' }), 
 });
 
 // ----------------------------------------------------------------------
@@ -47,14 +43,12 @@ export function UserNewEditForm({ currentUser }) {
 
   const defaultValues = useMemo(
     () => ({
-      status: currentUser?.status || '',
-      avatarUrl: currentUser?.avatarUrl || null,
-      isVerified: currentUser?.isVerified || true,
-      firstname: currentUser?.firstname || '',
-      lastname: currentUser?.lastname || '',
+      firstName: currentUser?.firstName || '',
+      lastName: currentUser?.lastName || '',
       email: currentUser?.email || '',
       phoneNumber: currentUser?.phoneNumber || '',
-      role: currentUser?.role || '',
+      password: currentUser?.password || '',
+      userName: currentUser?.userName || ''
     }),
     [currentUser]
   );
@@ -79,18 +73,31 @@ export function UserNewEditForm({ currentUser }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      toast.success(currentUser ? 'Güncelleme başarılı!' : 'Kayıt başarılı!');
-      router.push(paths.dashboard.user.list);
-      console.info('DATA', data);
+      // Backend API'yi çağırıyoruz
+      const response = await axios.post('http://localhost:6700/auth/users', {
+        userName: data.userName,
+        password: data.password,
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phoneNumber: data.phoneNumber
+      });
+
+      // API çağrısı başarılı olduysa, formu sıfırlayıp, yönlendirme yapıyoruz
+      if (response.status === 201) {
+        
+        reset();
+        toast.success('Kayıt başarılı!');
+        router.push(paths.dashboard.user.list);
+      }
     } catch (error) {
-      console.error(error);
+      console.error('Kullanıcı kaydedilemedi:', error);
+      toast.error('Kullanıcı kaydedilemedi, lütfen tekrar deneyin.');
     }
   });
 
   return (
-    <Form methods={methods} onSubmit={onSubmit}>
+    <Form methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
         <Grid xs={12} md={8}>
           <Card sx={{ p: 3 }}>
@@ -103,8 +110,9 @@ export function UserNewEditForm({ currentUser }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <Field.Text name="firstname" label="Ad" />
-              <Field.Text name="lastname" label="Soyad" />
+              <Field.Text name="userName" label="Kullanıcı Adı" />
+              <Field.Text name="firstName" label="Ad" />
+              <Field.Text name="lastName" label="Soyad" />
               <Field.Text name="email" label="Email" />
               <Field.Phone name="phoneNumber" label="Telefon" />
               <Field.Text

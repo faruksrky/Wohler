@@ -1,24 +1,36 @@
+import qs from 'qs';
+
 import axios, { endpoints } from 'src/utils/axios';
 
 import { setSession } from './utils';
 import { STORAGE_KEY } from './constant';
+import {CONFIG} from '../../../config-global';
 
 /** **************************************
  * Sign in
  *************************************** */
-export const signInWithPassword = async ({ email, password }) => {
+export const signInWithPassword = async ({ username, password }) => {
   try {
-    const params = { email, password };
+    const params = qs.stringify(
+      { username, password },
+      { arrayFormat: 'brackets' }
+    );
 
-    const res = await axios.post(endpoints.auth.signIn, params);
+    const res = await axios.post(CONFIG.loginUrl, params, 
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
+    );
 
-    const { accessToken } = res.data;
+    const accessToken = res.data.access_token;
 
     if (!accessToken) {
       throw new Error('Access token not found in response');
     }
 
-    setSession(accessToken);
+    setSession(accessToken,username);
   } catch (error) {
     console.error('Error during sign in:', error);
     throw error;

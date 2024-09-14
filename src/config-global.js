@@ -8,6 +8,7 @@ export const CONFIG = {
   appName: 'Minimal UI',
   appVersion: packageJson.version,
   serverUrl: import.meta.env.VITE_SERVER_URL ?? '',
+  loginUrl: import.meta.env.VITE_LOGIN_URL ?? '',
   assetsDir: import.meta.env.VITE_ASSETS_DIR ?? '',
   /**
    * Auth
