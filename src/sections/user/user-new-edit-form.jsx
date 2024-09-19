@@ -15,6 +15,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { signUp } from 'src/auth/context/jwt';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -71,25 +72,18 @@ export function UserNewEditForm({ currentUser }) {
 
   const values = watch();
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data) => { 
     try {
-      // Backend API'yi çağırıyoruz
-      const response = await axios.post('http://localhost:6700/auth/users', {
-        userName: data.userName,
-        password: data.password,
+
+      await signUp({
+        username: data.email,
         email: data.email,
+        password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
-        phoneNumber: data.phoneNumber
       });
-
       // API çağrısı başarılı olduysa, formu sıfırlayıp, yönlendirme yapıyoruz
-      if (response.status === 201) {
-        
-        reset();
-        toast.success('Kayıt başarılı!');
-        router.push(paths.dashboard.user.list);
-      }
+      reset();
     } catch (error) {
       console.error('Kullanıcı kaydedilemedi:', error);
       toast.error('Kullanıcı kaydedilemedi, lütfen tekrar deneyin.');

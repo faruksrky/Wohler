@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { z as zod } from 'zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -27,16 +28,16 @@ import { SignUpTerms } from '../../components/sign-up-terms';
 // ----------------------------------------------------------------------
 
 export const SignUpSchema = zod.object({
-  firstName: zod.string().min(1, { message: 'First name is required!' }),
-  lastName: zod.string().min(1, { message: 'Last name is required!' }),
+  firstName: zod.string().min(1, { message: 'Ad bilgisi gereklidir!' }),
+  lastName: zod.string().min(1, { message: 'Soyad bilgisi gereklidir!' }),
   email: zod
     .string()
-    .min(1, { message: 'Email is required!' })
-    .email({ message: 'Email must be a valid email address!' }),
+    .min(1, { message: 'Email bilgisi gereklidir!' })
+    .email({ message: 'Geçerli bir Email adresi girilmelidir!' }),
   password: zod
     .string()
-    .min(1, { message: 'Password is required!' })
-    .min(6, { message: 'Password must be at least 6 characters!' }),
+    .min(1, { message: 'Şifre bilgisi gereklidir!' })
+    .min(6, { message: 'Şifre en az 6 karakterden oluşmalıdır!' }),
 });
 
 // ----------------------------------------------------------------------
@@ -51,10 +52,10 @@ export function JwtSignUpView() {
   const [errorMsg, setErrorMsg] = useState('');
 
   const defaultValues = {
-    firstName: 'Hello',
-    lastName: 'Friend',
-    email: 'hello@gmail.com',
-    password: '@demo1',
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
   };
 
   const methods = useForm({
@@ -67,36 +68,38 @@ export function JwtSignUpView() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data) => { 
     try {
+
       await signUp({
+        username: data.email,
         email: data.email,
         password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
       });
-      await checkUserSession?.();
 
+      await checkUserSession?.();
       router.refresh();
-    } catch (error) {
+    }
+    catch (error) {
       console.error(error);
       setErrorMsg(typeof error === 'string' ? error : error.message);
-    }
-  });
+    }});
 
   const renderForm = (
     <Box gap={3} display="flex" flexDirection="column">
       <Box display="flex" gap={{ xs: 3, sm: 2 }} flexDirection={{ xs: 'column', sm: 'row' }}>
-        <Field.Text name="firstName" label="First name" InputLabelProps={{ shrink: true }} />
-        <Field.Text name="lastName" label="Last name" InputLabelProps={{ shrink: true }} />
+        <Field.Text name="firstName" label="Ad" InputLabelProps={{ shrink: true }} />
+        <Field.Text name="lastName" label="Soyad" InputLabelProps={{ shrink: true }} />
       </Box>
 
-      <Field.Text name="email" label="Email address" InputLabelProps={{ shrink: true }} />
+      <Field.Text name="email" label="Email" InputLabelProps={{ shrink: true }} />
 
       <Field.Text
         name="password"
-        label="Password"
-        placeholder="6+ characters"
+        label="Şifre"
+        placeholder="6+ karakter"
         type={password.value ? 'text' : 'password'}
         InputLabelProps={{ shrink: true }}
         InputProps={{
@@ -117,9 +120,9 @@ export function JwtSignUpView() {
         type="submit"
         variant="contained"
         loading={isSubmitting}
-        loadingIndicator="Create account..."
+        loadingIndicator="Hesap oluştur..."
       >
-        Create account
+        Hesap Oluştur
       </LoadingButton>
     </Box>
   );
@@ -127,15 +130,8 @@ export function JwtSignUpView() {
   return (
     <>
       <FormHead
-        title="Get started absolutely free"
-        description={
-          <>
-            {`Already have an account? `}
-            <Link component={RouterLink} href={paths.auth.jwt.signIn} variant="subtitle2">
-              Get started
-            </Link>
-          </>
-        }
+        title="Direct Nexus Hesap Oluşturma"
+        description="Hesap oluşturarak Direct Nexus platformunu kullanmaya başlayabilirsiniz."
         sx={{ textAlign: { xs: 'center', md: 'left' } }}
       />
 

@@ -24,12 +24,15 @@ export const paths = {
     jwt: {
       signIn: `${ROOTS.AUTH}/jwt/sign-in`,
       signUp: `${ROOTS.AUTH}/jwt/sign-up`,
+      resetPassword: `${ROOTS.AUTH}/jwt/reset-password`,
+      updatePassword: `${ROOTS.AUTH}/jwt/update-password`,
     },
     firebase: {
       signIn: `${ROOTS.AUTH}/firebase/sign-in`,
       verify: `${ROOTS.AUTH}/firebase/verify`,
       signUp: `${ROOTS.AUTH}/firebase/sign-up`,
       resetPassword: `${ROOTS.AUTH}/firebase/reset-password`,
+      updatePassword: `${ROOTS.AUTH}/firebase/update-password`,
     },
     auth0: {
       signIn: `${ROOTS.AUTH}/auth0/sign-in`,

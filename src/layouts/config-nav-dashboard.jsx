@@ -58,7 +58,7 @@ export const navData = [
         path: paths.dashboard.user.root,
         icon: ICONS.user,
         children: [
-          { title: 'Liste', path: paths.dashboard.user.list },
+          { title: 'Kullanıcı Listesi', path: paths.dashboard.user.list },
           { title: 'Yeni Kullanıcı', path: paths.dashboard.user.new },
           { title: 'Güncelle', path: paths.dashboard.user.demo.edit },
         ],

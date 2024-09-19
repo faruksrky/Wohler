@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
+import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
@@ -27,13 +28,14 @@ import { signInWithPassword } from '../../context/jwt';
 export const SignInSchema = zod.object({
   username: zod
     .string()
-    .min(1, { message: 'Email is required!' })
-    .email({ message: 'Email must be a valid email address!' }),
+    .min(1, { message: 'Email bilgisi gereklidir!' })
+    .email({ message: 'Geçerli bir Email adresi girilmelidir!' }),
   password: zod
     .string()
-    .min(1, { message: 'Password is required!' })
-    .min(6, { message: 'Password must be at least 6 characters!' }),
+    .min(1, { message: 'Şifre bilgisi gereklidir!' })
+    .min(6, { message: 'Şifre 6 karakterden oluşmalıdır!' }),
 });
+
 
 // ----------------------------------------------------------------------
 
@@ -47,8 +49,8 @@ export function JwtSignInView() {
   const password = useBoolean();
 
   const defaultValues = {
-    username: '',
-    password: '',
+    username: 'sinan@gmail.com',
+    password: '123456',
   };
 
   const methods = useForm({
@@ -76,18 +78,18 @@ export function JwtSignInView() {
   const renderForm = (
     <Box gap={3} display="flex" flexDirection="column">
       <Field.Text name="username" label="Email" InputLabelProps={{ shrink: true }} />
-
       <Box gap={1.5} display="flex" flexDirection="column">
+        {/* 
         <Link
           component={RouterLink}
-          href="#"
+          href={paths.auth.jwt.updatePassword}
           variant="body2"
           color="inherit"
           sx={{ alignSelf: 'flex-end' }}
         >
-          Forgot password?
+          Şifremi unuttum
         </Link>
-
+        */}
         <Field.Text
           name="password"
           label="Şifre"
@@ -124,27 +126,20 @@ export function JwtSignInView() {
     <>
       <FormHead
         title="Kullanıcı Girişi"
-        /*
+      /*
         description={
           <>
-            {`Don’t have an account? `}
+            {`Henüz hesabınız yok mu? `}
             <Link component={RouterLink} href={paths.auth.jwt.signUp} variant="subtitle2">
-              Get started
+               Şimdi Kaydolun
             </Link>
           </>
           
         }
-        */
-        description={<>Lütfen giriş bilgilerinizi girin.</>}
+      */
         sx={{ textAlign: { xs: 'center', md: 'left' } }}
       />
-
-      <Alert severity="info" sx={{ mb: 3 }}>   
-        Use <strong>{defaultValues.username}</strong>
-        {' with password '}
-        <strong>{defaultValues.password}</strong>
-      </Alert>
-
+    
       {!!errorMsg && (
         <Alert severity="error" sx={{ mb: 3 }}>
           {errorMsg}
@@ -155,5 +150,6 @@ export function JwtSignInView() {
         {renderForm}
       </Form>
     </>
+    
   );
 }

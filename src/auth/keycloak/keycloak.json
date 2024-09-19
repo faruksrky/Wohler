@@ -1,8 +1,0 @@
-{
-  "realm": "DirectNexus",
-  "auth-server-url": "http://localhost:9082",
-  "clientId": "DN",
-  "ssl-required": "external",
-  "public-client": true
-
-}

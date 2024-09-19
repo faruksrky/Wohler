@@ -69,10 +69,11 @@ export function tokenExpired(exp) {
 
 // ----------------------------------------------------------------------
 
-export async function setSession(accessToken) {
+export async function setSession(accessToken,user) {
   try {
     if (accessToken) {
       sessionStorage.setItem(STORAGE_KEY, accessToken);
+      sessionStorage.setItem('user', JSON.stringify(user));
 
       axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
@@ -85,6 +86,7 @@ export async function setSession(accessToken) {
       }
     } else {
       sessionStorage.removeItem(STORAGE_KEY);
+      sessionStorage.removeItem('user');
       delete axios.defaults.headers.common.Authorization;
     }
   } catch (error) {

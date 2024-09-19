@@ -30,40 +30,11 @@ export function UserTableRow({ row, selected, onSelectRow }) {
           <Checkbox id={row.id} checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell>
-          <Stack spacing={2} direction="row" alignItems="center">
-            <Avatar alt={row.name} src={row.avatarUrl} />
-
-            <Stack sx={{ typography: 'body2', flex: '1 1 auto', alignItems: 'flex-start' }}>
-              <Box component="span" sx={{ color: 'text.disabled' }}>
-                {row.email}
-              </Box>
-            </Stack>
-          </Stack>
-        </TableCell>
-
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.customerFirstName}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.customerLastName}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.phoneNumber}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.emailAddress}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.address}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.productName}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.model}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.serialNumber}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.purchaseDate}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.faultDescription}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.faultDate}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.preliminaryDiagnosis}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.servicePersonnel}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.operationDate}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.performedOperations}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.replacedParts}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.warrantyStatus}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.paymentStatus}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.serviceCompletionStatus}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.deliveryDate}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.notes}</TableCell>
-
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.id}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.firstName}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.lastName}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.email}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.userName}</TableCell>
       </TableRow>
 
 {/*

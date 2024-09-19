@@ -34,7 +34,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { UserTableRow } from '../user/user-table-row';
+import { CustomerTableRow } from '../user/customer-table-row';
 import { UserTableToolbar } from '../user/user-table-toolbar';
 import { UserTableFiltersResult } from '../user/user-table-filters-result';
 
@@ -248,7 +248,7 @@ export function CustomerServiceListView() {
                           table.page * table.rowsPerPage + table.rowsPerPage
                         )
                         .map((row) => (
-                          <UserTableRow
+                          <CustomerTableRow
                             key={row.id}
                             row={row}
                             selected={table.selected.includes(row.id)}

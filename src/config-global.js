@@ -9,6 +9,8 @@ export const CONFIG = {
   appVersion: packageJson.version,
   serverUrl: import.meta.env.VITE_SERVER_URL ?? '',
   loginUrl: import.meta.env.VITE_LOGIN_URL ?? '',
+  usersListUrl: import.meta.env.VITE_USERS_LIST_URL ?? '', 
+  signUpUrl: import.meta.env.VITE_SIGNUP_URL ?? '',
   assetsDir: import.meta.env.VITE_ASSETS_DIR ?? '',
   /**
    * Auth

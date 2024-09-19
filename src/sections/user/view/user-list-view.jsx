@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import axios from 'axios';
+import { useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -36,6 +37,9 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { STORAGE_KEY } from 'src/auth/context/jwt/constant';
+
+import {CONFIG} from '../../../config-global';
 import { UserTableRow } from '../user-table-row';
 import { UserTableToolbar } from '../user-table-toolbar';
 import { UserTableFiltersResult } from '../user-table-filters-result';
@@ -45,25 +49,42 @@ import { UserTableFiltersResult } from '../user-table-filters-result';
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
-  { id: 'firstname', label: 'Ad' },
-  { id: 'lastname', label: 'Soyad' },
+  { id: 'id', label: 'ID' },
+  { id: 'firstName', label: 'Ad' },
+  { id: 'lastName', label: 'Soyad' },
   { id: 'email', label: 'Email' },
-  { id: 'phoneNumber', label: 'Telefon', width: 180 },
-  { id: '', width: 88 },
+  { id: 'userName', label: 'Kullanıcı Adı'},
 ];
 
 // ----------------------------------------------------------------------
 
 export function UserListView() {
   const table = useTable();
-
   const router = useRouter();
-
   const confirm = useBoolean();
-
-  const [tableData, setTableData] = useState(_userList);
-
+  const [loading, setLoading] = useState(true);
+  const [tableData, setTableData] = useState([]);
   const filters = useSetState({ name: '', role: [], status: 'all' });
+  const accessToken = sessionStorage.getItem(STORAGE_KEY);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(CONFIG.usersListUrl, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        });
+        setTableData(response.data);
+      } catch (error) {
+        console.error('error', error);
+      }
+    };
+    fetchData();
+  }, [accessToken]); // Include 'accessToken' in the dependency array
+  
+  // Rest of the code...
+  
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -74,18 +95,12 @@ export function UserListView() {
   const dataInPage = rowInPage(dataFiltered, table.page, table.rowsPerPage);
 
   const canReset =
-    !!filters.state.name || filters.state.role.length > 0 || filters.state.status !== 'all';
+    !!filters.state.firstName || filters.state.lastName;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
-
-  const handleFilterStatus = useCallback(
-    (event, newValue) => {
-      table.onResetPage();
-      filters.setState({ status: newValue });
-    },
-    [filters, table]
-  );
+  const handleFilterStatus = (_, newValue) => {" "}
+  // Rest of the code...
 
   return (
     <>
@@ -133,9 +148,8 @@ export function UserListView() {
                       'soft'
                     }
                     color={
-                      (tab.value === 'active' && 'success') ||
-                      (tab.value === 'pending' && 'warning') ||
-                      (tab.value === 'banned' && 'error') ||
+                      (tab.value === 'İsim' && 'success') ||
+                      (tab.value === 'Soyisim' && 'warning') ||
                       'default'
                     }
                   >
@@ -238,7 +252,13 @@ export function UserListView() {
 }
 
 function applyFilter({ inputData, comparator, filters }) {
-  const { name, status, role } = filters;
+  const { firstName, lastName } = filters;
+
+  // inputData'nın bir dizi olup olmadığını kontrol edin
+  if (!Array.isArray(inputData)) {
+    console.error('inputData is not an array:', inputData);
+    return [];
+  }
 
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
@@ -250,18 +270,16 @@ function applyFilter({ inputData, comparator, filters }) {
 
   inputData = stabilizedThis.map((el) => el[0]);
 
-  if (name) {
-    inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+  if (firstName) {
+    inputData = inputData.filter((user) =>
+      user.customerFirstName.toLowerCase().includes(firstName.toLowerCase())
     );
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((user) => user.status === status);
-  }
-
-  if (role.length) {
-    inputData = inputData.filter((user) => role.includes(user.role));
+  if (lastName) {
+    inputData = inputData.filter((user) =>
+      user.customerLastName.toLowerCase().includes(lastName.toLowerCase())
+    );
   }
 
   return inputData;

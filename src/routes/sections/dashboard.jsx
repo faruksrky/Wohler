@@ -10,7 +10,7 @@ import { AuthGuard } from 'src/auth/guard';
 
 // ----------------------------------------------------------------------
 
-const IndexPage = lazy(() => import('src/pages/dashboard/user/new'));
+const IndexPage = lazy(() => import('src/pages/dashboard/customerservice'));
 const CustomerListPage = lazy(() => import('src/pages/dashboard/customerservice'));
 
 const UserListPage = lazy(() => import('src/pages/dashboard/user/list'));
