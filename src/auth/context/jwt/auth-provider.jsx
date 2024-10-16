@@ -1,3 +1,4 @@
+import { jwtDecode } from 'jwt-decode';
 import { useMemo, useEffect, useCallback } from 'react';
 
 import { useSetState } from 'src/hooks/use-set-state';
@@ -11,20 +12,27 @@ import { setSession, isValidToken } from './utils';
 export function AuthProvider({ children }) {
   const { state, setState } = useSetState({
     user: null,
+    email: null,
     loading: true,
   });
 
   const checkUserSession = useCallback(async () => {
     try {
       const accessToken = sessionStorage.getItem(STORAGE_KEY);
-      const user = JSON.parse(localStorage.getItem('user'));
-
+  
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        setState({ user: { ...user, accessToken }, loading: false });
+        const jwtDecodeModule = jwtDecode;
+        const decodedToken = jwtDecodeModule.default
+          ? jwtDecodeModule.default(accessToken)
+          : jwtDecodeModule(accessToken); // default varsa kullan, yoksa modülü direkt kullan
+
+       const { given_name: user, email } = decodedToken;
+          
+       setState({ user: {user, email, accessToken }, loading: false });
       } else {
-        setState({ user: null, loading: false });
+        setState({ user: null, email: null, loading: false });
       }
     } catch (error) {
       console.error(error);
@@ -61,6 +69,3 @@ export function AuthProvider({ children }) {
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;
 }
-
-
-

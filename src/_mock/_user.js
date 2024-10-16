@@ -2,11 +2,33 @@ import { _mock } from './_mock';
 
 // ----------------------------------------------------------------------
 
+
 export const USER_STATUS_OPTIONS = [
   { value: 'active', label: 'Active' },
   { value: 'pending', label: 'Pending' },
   { value: 'banned', label: 'Banned' },
   { value: 'rejected', label: 'Rejected' },
+];
+
+export const SERVICE_COMPLETION_STATUS_OPTIONS = [
+  { value: 'Beklemede', label: 'Beklemede' },
+  { value: 'Tamamlandı', label: 'Tamamlandı'},
+  { value: 'Teslim_Edildi', label: 'Teslim_Edildi' },
+];
+
+export const WARRANTY_STATUS_OPTIONS = [
+  { value: 'Aktif', label: 'Aktif' },
+  { value: 'Garanti_Dışı', label: 'Garanti_Dışı' },
+  { value: 'Bilinmiyor', label: 'Bilinmiyor' },
+];
+
+export const CARGO_STATUS_OPTIONS = [
+  { value: 'Gonderici_Subede', label: 'Gonderici_Subede' },
+  { value: 'Yolda', label: 'Yolda' },
+  { value: 'Aktarma_Merkezinde', label: 'Aktarma_Merkezinde' },
+  { value: 'Alici_Subede', label: 'Alici_Subede' },
+  { value: 'Teslim_Edildi', label: 'Teslim_Edildi' },
+
 ];
 
 export const _userAbout = {

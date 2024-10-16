@@ -4,21 +4,28 @@ import Chip from '@mui/material/Chip';
 
 import { chipProps, FiltersBlock, FiltersResult } from 'src/components/filters-result';
 
-export function UserTableFiltersResult({ filters, onResetPage, totalResults, sx }) {
-  const handleRemoveFirstName = useCallback(() => {
-    onResetPage();
-    filters.setState({ firstName: '' });
-  }, [filters, onResetPage]);
+// ----------------------------------------------------------------------
 
-  const handleRemoveLastName = useCallback(() => {
+export function CustomerTableFiltersResult({ filters, onResetPage, totalResults, sx }) {
+  const handleRemoveKeyword = useCallback(() => {
     onResetPage();
-    filters.setState({ lastName: '' });
+    filters.setState({ name: '' });
   }, [filters, onResetPage]);
 
   const handleRemoveStatus = useCallback(() => {
     onResetPage();
     filters.setState({ status: 'all' });
   }, [filters, onResetPage]);
+
+  const handleRemoveRole = useCallback(
+    (inputValue) => {
+      const newValue = filters.state.role.filter((item) => item !== inputValue);
+
+      onResetPage();
+      filters.setState({ role: newValue });
+    },
+    [filters, onResetPage]
+  );
 
   const handleReset = useCallback(() => {
     onResetPage();
@@ -36,12 +43,14 @@ export function UserTableFiltersResult({ filters, onResetPage, totalResults, sx 
         />
       </FiltersBlock>
 
-      <FiltersBlock label="Adı:" isShow={!!filters.state.firstName}>
-        <Chip {...chipProps} label={filters.state.firstName} onDelete={handleRemoveFirstName} />
+      <FiltersBlock label="Role:" isShow={!!filters.state.role.length}>
+        {filters.state.role.map((item) => (
+          <Chip {...chipProps} key={item} label={item} onDelete={() => handleRemoveRole(item)} />
+        ))}
       </FiltersBlock>
 
-      <FiltersBlock label="Soyadı:" isShow={!!filters.state.lastName}>
-        <Chip {...chipProps} label={filters.state.lastName} onDelete={handleRemoveLastName} />
+      <FiltersBlock label="Keyword:" isShow={!!filters.state.name}>
+        <Chip {...chipProps} label={filters.state.name} onDelete={handleRemoveKeyword} />
       </FiltersBlock>
     </FiltersResult>
   );

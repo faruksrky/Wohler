@@ -1,11 +1,15 @@
 import { useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
+import Select from '@mui/material/Select';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
+import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
 import FormControl from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { Iconify } from 'src/components/iconify';
@@ -13,21 +17,24 @@ import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export function UserTableToolbar({ filters, options, onResetPage }) {
+export function CustomerTableToolbar({ filters, onResetPage, userNames }) {
   const popover = usePopover();
 
-  const handleFilterLastName = useCallback(
+  const handleFilterName = useCallback(
     (event) => {
       onResetPage();
-      filters.setState({ lastName: event.target.value });
+      filters.setState({ name: event.target.value });
     },
     [filters, onResetPage]
   );
 
-  const handleFilterFirstName = useCallback(
+  const handleFilterRole = useCallback(
     (event) => {
+      const newValue =
+        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value;
+
       onResetPage();
-      filters.setState({ firstName: event.target.value });
+      filters.setState({ role: newValue });
     },
     [filters, onResetPage]
   );
@@ -40,29 +47,37 @@ export function UserTableToolbar({ filters, options, onResetPage }) {
         direction={{ xs: 'column', md: 'row' }}
         sx={{ p: 2.5, pr: { xs: 2.5, md: 1 } }}
       >
-        <FormControl sx={{ flexShrink: 0, width: { xs: 1, md: 200 } }}>
-  <TextField
-    fullWidth
-    label="Adı"
-    value={filters.state.firstName}
-    onChange={handleFilterFirstName}
-  />
-</FormControl>
-
-<FormControl sx={{ flexShrink: 0, width: { xs: 1, md: 200 } }}>
-  <TextField
-    fullWidth
-    label="Soyadı"
-    value={filters.state.lastName}
-    onChange={handleFilterLastName}
-  />
-</FormControl>
+        <FormControl sx={{ flexShrink: 0, width: { xs: 200, md: 350 } }}>
+          <InputLabel htmlFor="user-filter-role-select-label">Servis Personeli</InputLabel>
+          <Select
+            fullWidth
+            multiple
+            value={filters.state.role}
+            onChange={handleFilterRole}
+            input={<OutlinedInput label="ServisPersoneli" />}
+            renderValue={(selected) => selected.map((value) => value).join(', ')}
+            inputProps={{ id: 'user-filter-role-select-label' }}
+            MenuProps={{ PaperProps: { sx: { maxHeight: 240 } } }}
+          >
+            {(userNames || []).map((userName) => (
+              <MenuItem key={userName} value={userName}>
+                <Checkbox
+                  id={userName.toString()}
+                  disableRipple
+                  size="small"
+                  checked={filters.state.role.includes(userName)}
+                />
+                {userName}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField
             fullWidth
             value={filters.state.name}
-            onChange={handleFilterFirstName }
+            onChange={handleFilterName}
             placeholder="Ara..."
             InputProps={{
               startAdornment: (

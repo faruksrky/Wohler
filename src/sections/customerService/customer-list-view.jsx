@@ -1,10 +1,9 @@
-import { useState, useCallback, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
+import Tabs from '@mui/material/Tabs';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 
@@ -15,8 +14,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useSetState } from 'src/hooks/use-set-state';
 
 import { varAlpha } from 'src/theme/styles';
-import { _roles, USER_STATUS_OPTIONS } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
+import { SERVICE_COMPLETION_STATUS_OPTIONS } from 'src/_mock/_user';
 
 import { Label } from 'src/components/label';
 import { Scrollbar } from 'src/components/scrollbar';
@@ -34,62 +33,73 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { CustomerTableRow } from '../user/customer-table-row';
-import { UserTableToolbar } from '../user/user-table-toolbar';
-import { UserTableFiltersResult } from '../user/user-table-filters-result';
+import { CustomerTableRow } from './customer-table-row';
+import { getUserNames } from '../userNames/userNamesAPI';
+import { CustomerTableToolbar } from './customer-table-toolbar';
+import { fetchCustomerList } from '../user/view/_customerservicelist';
+import { CustomerTableFiltersResult } from './customer-table-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
+const STATUS_OPTIONS = [{ value: 'all', label: 'Liste' }, ...SERVICE_COMPLETION_STATUS_OPTIONS];
+
+const calculateWidth = (content) => {
+  // Her karakter için 8px genişlik varsayıyoruz
+  const widthPerChar = 8;
+  // İçeriğin genişliğini hesaplıyoruz
+  const contentWidth = content.length * widthPerChar;
+  // Genişlik, içeriğin genişliği ile belirtilen minimum genişlik arasındaki en büyük değer olmalıdır
+  return Math.max(contentWidth, 200);
+};
 
 const TABLE_HEAD = [
-  { id: 'id', label: 'ID', width: 90 },
-  { id: 'customerFirstName', label: 'First Name', width: 150 },
-  { id: 'customerLastName', label: 'Last Name', width: 150 },
-  { id: 'phoneNumber', label: 'Phone Number', width: 150 },
-  { id: 'emailAddress', label: 'Email Address', width: 200 },
-  { id: 'address', label: 'Address', width: 250 },
-  { id: 'productName', label: 'Product Name', width: 150 },
-  { id: 'model', label: 'Model', width: 120 },
-  { id: 'serialNumber', label: 'Serial Number', width: 150 },
-  { id: 'purchaseDate', label: 'Purchase Date', width: 150 },
-  { id: 'faultDescription', label: 'Fault Description', width: 250 },
-  { id: 'faultDate', label: 'Fault Date', width: 150 },
-  { id: 'preliminaryDiagnosis', label: 'Preliminary Diagnosis', width: 250 },
-  { id: 'servicePersonnel', label: 'Service Personnel', width: 150 },
-  { id: 'operationDate', label: 'Operation Date', width: 150 },
-  { id: 'performedOperations', label: 'Performed Operations', width: 250 },
-  { id: 'replacedParts', label: 'Replaced Parts', width: 250 },
-  { id: 'warrantyStatus', label: 'Warranty Status', width: 150 },
-  { id: 'paymentStatus', label: 'Payment Status', width: 150 },
-  { id: 'serviceCompletionStatus', label: 'Service Completion Status', width: 250 },
-  { id: 'deliveryDate', label: 'Delivery Date', width: 150 },
-  { id: 'notes', label: 'Notes', width: 300 },
+  { id: 'customerFirstName', label: 'İsim', width: calculateWidth('İsim') },
+  { id: 'customerLastName', label: 'Soyisim', width: calculateWidth('Soyisim') },
+  { id: 'phoneNumber', label: 'Telefon', width: calculateWidth('Telefon') },
+  { id: 'emailAddress', label: 'E-Posta', width: calculateWidth('E-Posta') },
+  { id: 'address', label: 'Adres', width: calculateWidth('Adres') },
+  { id: 'productName', label: 'Ürün Adı', width: calculateWidth('Ürün Adı') },
+  { id: 'faultDescription', label: 'Arıza Tanımı', width: calculateWidth('Arıza Tanımı') },
+  { id: 'faultDate', label: 'Arıza Tarihi', width: calculateWidth('Arıza Tarihi') },
+  { id: 'servicePersonnel', label: 'Servis Personeli', width: calculateWidth('Servis Personeli') },
+  { id: 'warrantyStatus', label: 'Garanti Durumu', width: calculateWidth('Garanti Durumu') },
+  { id: 'cargoStatus', label: 'Kargo Durumu', width: calculateWidth('Kargo Durumu') },
+  {
+    id: 'serviceCompletionStatus',
+    label: 'Servis Tamamlanma Durumu',
+    width: calculateWidth('Servis Tamamlanma Durum'),
+  },
+  { id: 'operationDate', label: 'Operasyon Tarihi', width: calculateWidth('Operasyon Tarihi') },
+  { id: 'deliveryDate', label: 'Teslim Tarihi', width: calculateWidth('Teslim Tarihi') },
+  { id: 'notes', label: 'Notlar', width: calculateWidth('Notlar') },
+  { id: '', label: '', width: calculateWidth('') },
 ];
 
 // ----------------------------------------------------------------------
 
 export function CustomerServiceListView() {
   const table = useTable();
-
   const router = useRouter();
-
   const confirm = useBoolean();
-
   const [tableData, setTableData] = useState([]);
+  const [userNames, setUserNames] = useState([]);
+
+  const fetchData = async () => {
+    const result = await fetchCustomerList();
+    setTableData(result);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/api/service-requests');
-        setTableData(Array.isArray(response.data) ? response.data : []);
-      } catch (error) {
-        console.error('Error fetching data', error);
-        setTableData([]);
-      }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserNames = async () => {
+      const result = await getUserNames();
+      setUserNames(result);
     };
 
-    fetchData();
+    fetchUserNames();
   }, []);
 
   const filters = useSetState({
@@ -104,13 +114,6 @@ export function CustomerServiceListView() {
     comparator: getComparator(table.order, table.orderBy),
     filters: filters.state,
   });
-
-  const handleEditRow = useCallback(
-    (id) => {
-      router.push(paths.dashboard.user.edit(id));
-    },
-    [router]
-  );
 
   const dataInPage = rowInPage(dataFiltered, table.page, table.rowsPerPage);
 
@@ -168,14 +171,15 @@ export function CustomerServiceListView() {
                         'soft'
                       }
                       color={
-                        (tab.value === 'active' && 'success') ||
-                        (tab.value === 'pending' && 'warning') ||
-                        (tab.value === 'banned' && 'error') ||
+                        (tab.value === 'Teslim_Edildi' && 'success') ||
+                        (tab.value === 'Tamamlandı' && 'warning') ||
+                        (tab.value === 'Beklemede' && 'error') ||
                         'default'
                       }
                     >
-                      {['active', 'pending', 'banned', 'rejected'].includes(tab.value)
-                        ? tableData.filter((user) => user.status === tab.value).length
+                      {['Teslim_Edildi', 'Tamamlandı', 'Beklemede'].includes(tab.value)
+                        ? tableData.filter((user) => user.serviceCompletionStatus === tab.value)
+                            .length
                         : tableData.length}
                     </Label>
                   }
@@ -183,14 +187,13 @@ export function CustomerServiceListView() {
               ))}
             </Tabs>
 
-            <UserTableToolbar
+            <CustomerTableToolbar
               filters={filters}
               onResetPage={table.onResetPage}
-              options={{ roles: _roles }}
+              userNames={userNames}
             />
-
             {canReset && (
-              <UserTableFiltersResult
+              <CustomerTableFiltersResult
                 filters={filters}
                 totalResults={dataFiltered.length}
                 onResetPage={table.onResetPage}
@@ -250,9 +253,11 @@ export function CustomerServiceListView() {
                         .map((row) => (
                           <CustomerTableRow
                             key={row.id}
+                            fetchData={fetchData}
                             row={row}
                             selected={table.selected.includes(row.id)}
                             onSelectRow={() => table.onSelectRow(row.id)}
+                            userNames={userNames}
                           />
                         ))}
 
@@ -287,15 +292,12 @@ export function CustomerServiceListView() {
 }
 
 function applyFilter({ inputData, comparator, filters }) {
-  const { customerFirstName, customerLastName, status, role } = filters;
+  const { role, name, status } = filters;
 
-  // inputData'nın bir dizi olup olmadığını kontrol edin
   if (!Array.isArray(inputData)) {
     console.error('inputData is not an array:', inputData);
     return [];
   }
-
-  console.log('Before filtering:', inputData);
 
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
@@ -307,24 +309,18 @@ function applyFilter({ inputData, comparator, filters }) {
 
   inputData = stabilizedThis.map((el) => el[0]);
 
-  if (customerFirstName) {
-    inputData = inputData.filter((user) =>
-      user.customerFirstName.toLowerCase().includes(customerFirstName.toLowerCase())
-    );
+  if (role.length) {
+    inputData = inputData.filter((user) => role.includes(user.role));
   }
 
-  if (customerLastName) {
-    inputData = inputData.filter((user) =>
-      user.customerLastName.toLowerCase().includes(customerLastName.toLowerCase())
+  if (name) {
+    inputData = inputData.filter(
+      (user) => user.customerFirstName.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((user) => user.status === status);
-  }
-
-  if (role.length) {
-    inputData = inputData.filter((user) => role.includes(user.role));
+    inputData = inputData.filter((user) => user.serviceCompletionStatus === status);
   }
 
   return inputData;

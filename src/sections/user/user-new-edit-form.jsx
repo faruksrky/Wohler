@@ -1,27 +1,28 @@
-import axios from 'axios';
 import { z as zod } from 'zod';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isValidPhoneNumber } from 'react-phone-number-input/input';
 
 import Box from '@mui/material/Box';
+import MuiAlert from '@mui/lab/Alert';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { Snackbar } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { signUp } from 'src/auth/context/jwt';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { toast } from 'src/components/snackbar';
 import { Iconify } from 'src/components/iconify';
 import { Form, Field, schemaHelper } from 'src/components/hook-form';
+
+import { signUp } from 'src/auth/context/jwt';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +42,10 @@ export const NewUserSchema = zod.object({
 
 export function UserNewEditForm({ currentUser }) {
   const router = useRouter();
+
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('success');
 
   const defaultValues = useMemo(
     () => ({
@@ -72,28 +77,45 @@ export function UserNewEditForm({ currentUser }) {
 
   const values = watch();
 
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+  
+    setOpen(false);
+  };
+
   const onSubmit = handleSubmit(async (data) => { 
     try {
-
       await signUp({
-        username: data.email,
+        userName: data.email,
         email: data.email,
         password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
       });
-      // API çağrısı başarılı olduysa, formu sıfırlayıp, yönlendirme yapıyoruz
+  
+      setMessage('Kullanıcı başarıyla kaydedildi.');
+      setSeverity('success');
+      setOpen(true);
       reset();
     } catch (error) {
-      console.error('Kullanıcı kaydedilemedi:', error);
-      toast.error('Kullanıcı kaydedilemedi, lütfen tekrar deneyin.');
+      console.log('error', error);
+      if (error.response && error.response.status === 409) {
+        setMessage('Bu e-posta adresi veya kullanıcı adı zaten kullanımda.');
+      } else {
+        setMessage('Kullanıcı kaydedilemedi, lütfen tekrar deneyin.');
+      }
+      setSeverity('error');
+      setOpen(true);
     }
   });
 
   return (
+    <>
     <Form methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
+        <Grid xs={12} md={5}>
           <Card sx={{ p: 3 }}>
             <Box
               rowGap={3}
@@ -101,10 +123,10 @@ export function UserNewEditForm({ currentUser }) {
               display="grid"
               gridTemplateColumns={{
                 xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
+                sm: 'repeat(1, 1fr)',
               }}
             >
-              <Field.Text name="userName" label="Kullanıcı Adı" />
+              <Field.Text name="userName" label="Kullanıcı Adı"/>
               <Field.Text name="firstName" label="Ad" />
               <Field.Text name="lastName" label="Soyad" />
               <Field.Text name="email" label="Email" />
@@ -128,8 +150,8 @@ export function UserNewEditForm({ currentUser }) {
                 }}
               />
             </Box>
-
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+  
+            <Stack alignItems="flex-end" sx={{ mt: 1} }>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 {!currentUser ? 'Kullanıcı Oluştur' : 'Değişiklikleri Kaydet'}
               </LoadingButton>
@@ -138,5 +160,11 @@ export function UserNewEditForm({ currentUser }) {
         </Grid>
       </Grid>
     </Form>
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <MuiAlert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
+        {message}
+      </MuiAlert>
+    </Snackbar>
+    </>
   );
 }

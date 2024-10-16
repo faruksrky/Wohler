@@ -29,9 +29,8 @@ export const signInWithPassword = async ({ username, password }) => {
     const accessToken = res.data.access_token;
 
     if (!accessToken) {
-      throw new Error('Access token not found in response');
+      throw new Error('Access Token bulunamadı');
     }
-
     setSession(accessToken,username);
 
   } catch (error) {
@@ -49,9 +48,9 @@ export const signInWithPassword = async ({ username, password }) => {
 /** **************************************
  * Sign up
  *************************************** */
-export const signUp = async ({ username, email, password, firstName, lastName }) => {
+export const signUp = async ({ userName, email, password, firstName, lastName }) => {
   const params = {
-    username,
+    userName,
     email,
     password,
     firstName,
@@ -60,16 +59,14 @@ export const signUp = async ({ username, email, password, firstName, lastName })
 
   try {
     const res = await axios.post(CONFIG.signUpUrl, params);
-
-    const { accessToken } = res.data;
-
-    if (!accessToken) {
-      throw new Error('Access token not found in response');
-    }
+    const accessToken = sessionStorage.getItem('jwt_access_token');
 
     sessionStorage.setItem(STORAGE_KEY, accessToken);
+
+    // Return a success message
+    return 'Başarılı bir şekilde kayıt oldunuz.';
   } catch (error) {
-    console.error('Error during sign up:', error);
+    console.error('Yeni kullanıcı oluştururken hata oluştu:', error);
     throw error;
   }
 };

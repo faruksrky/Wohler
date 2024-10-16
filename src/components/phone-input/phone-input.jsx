@@ -90,7 +90,7 @@ export const PhoneInput = forwardRef(
           country={selectedCountry}
           inputComponent={CustomInput}
           InputLabelProps={{ shrink: true }}
-          placeholder={placeholder ?? 'Enter phone number'}
+          placeholder={placeholder ?? 'Telefon Numarası'}
           InputProps={{
             endAdornment: cleanValue && (
               <InputAdornment position="end">

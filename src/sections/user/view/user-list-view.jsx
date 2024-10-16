@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -18,7 +18,6 @@ import { useSetState } from 'src/hooks/use-set-state';
 
 import { varAlpha } from 'src/theme/styles';
 import { DashboardContent } from 'src/layouts/dashboard';
-import { _roles, _userList, USER_STATUS_OPTIONS } from 'src/_mock';
 
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
@@ -46,7 +45,7 @@ import { UserTableFiltersResult } from '../user-table-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
+const STATUS_OPTIONS = [{ value: 'all', label: 'Liste' }];
 
 const TABLE_HEAD = [
   { id: 'id', label: 'ID' },
@@ -64,7 +63,7 @@ export function UserListView() {
   const confirm = useBoolean();
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
-  const filters = useSetState({ name: '', role: [], status: 'all' });
+  const filters = useSetState({ firstName: '', lastName: '', status: 'all' });
   const accessToken = sessionStorage.getItem(STORAGE_KEY);
 
   useEffect(() => {
@@ -125,134 +124,141 @@ export function UserListView() {
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 
-        <Card>
-          <Tabs
-            value={filters.state.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: (theme) =>
-                `inset 0 -2px 0 0 ${varAlpha(theme.vars.palette.grey['500Channel'], 0.08)}`,
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab
-                key={tab.value}
-                iconPosition="end"
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label
-                    variant={
-                      ((tab.value === 'all' || tab.value === filters.state.status) && 'filled') ||
-                      'soft'
-                    }
-                    color={
-                      (tab.value === 'İsim' && 'success') ||
-                      (tab.value === 'Soyisim' && 'warning') ||
-                      'default'
-                    }
-                  >
-                    {['active', 'pending', 'banned', 'rejected'].includes(tab.value)
-                      ? tableData.filter((user) => user.status === tab.value).length
-                      : tableData.length}
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs>
-
-          <UserTableToolbar
-            filters={filters}
-            onResetPage={table.onResetPage}
-            options={{ roles: _roles }}
-          />
-
-          {canReset && (
-            <UserTableFiltersResult
-              filters={filters}
-              totalResults={dataFiltered.length}
-              onResetPage={table.onResetPage}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
-
-          <Box sx={{ position: 'relative' }}>
-            <TableSelectedAction
-              dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={dataFiltered.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  dataFiltered.map((row) => row.id)
-                )
-              }
-            />
-
-            <Scrollbar>
-              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={dataFiltered.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      dataFiltered.map((row) => row.id)
-                    )
+<Card sx={{ width: '100%', overflowX: 'auto' }}>
+            <Tabs
+              value={filters.state.status}
+              onChange={handleFilterStatus}
+              sx={{
+                px: 2.5,
+                boxShadow: (theme) =>
+                  `inset 0 -2px 0 0 ${varAlpha(theme.vars.palette.grey['500Channel'], 0.08)}`,
+              }}
+            >
+              {STATUS_OPTIONS.map((tab) => (
+                <Tab
+                  key={tab.value}
+                  iconPosition="end"
+                  value={tab.value}
+                  label={tab.label}
+                  icon={
+                    <Label
+                      variant={
+                        ((tab.value === 'all' || tab.value === filters.state.status) && 'filled') ||
+                        'soft'
+                      }
+                     
+                    >
+                      {['active', 'pending', 'banned', 'rejected'].includes(tab.value)
+                        ? tableData.filter((user) => user.status === tab.value).length
+                        : tableData.length}
+                    </Label>
                   }
                 />
+              ))}
+            </Tabs>
 
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row) => (
-                      <UserTableRow
-                        key={row.id}
-                        row={row}
-                        selected={table.selected.includes(row.id)}
-                        onSelectRow={() => table.onSelectRow(row.id)}
+            <UserTableToolbar
+              filters={filters}
+              onResetPage={table.onResetPage}
+            />
+
+            {canReset && (
+              <UserTableFiltersResult
+                filters={filters}
+                totalResults={dataFiltered.length}
+                onResetPage={table.onResetPage}
+                sx={{ p: 2.5, pt: 0 }}
+              />
+            )}
+
+            <Box sx={{ position: 'relative' }}>
+              <TableSelectedAction
+                dense={table.dense}
+                numSelected={table.selected.length}
+                rowCount={dataFiltered.length}
+                onSelectAllRows={(checked) =>
+                  table.onSelectAllRows(
+                    checked,
+                    dataFiltered.map((row) => row.id)
+                  )
+                }
+              />
+
+              <Box
+                sx={{
+                  position: 'relative',
+                  height: '500px',
+                  display: 'flex',
+                  justifyContent: 'flex-start',
+                  width: '100%', // Box genişliği %100 olarak ayarlandı
+                  overflowX: 'auto', // Yatay kaydırma çubuğu ekler
+                }}
+              >
+                <Scrollbar>
+                  <Table
+                    size={table.dense ? 'small' : 'medium'}
+                    sx={{ minWidth: 1500, width: '100%' }}
+                  >
+                    <TableHeadCustom
+                      order={table.order}
+                      orderBy={table.orderBy}
+                      headLabel={TABLE_HEAD}
+                      rowCount={dataFiltered.length}
+                      numSelected={table.selected.length}
+                      onSort={table.onSort}
+                      onSelectAllRows={(checked) =>
+                        table.onSelectAllRows(
+                          checked,
+                          dataFiltered.map((row) => row.id)
+                        )
+                      }
+                    />
+
+                    <TableBody>
+                      {dataFiltered
+                        .slice(
+                          table.page * table.rowsPerPage,
+                          table.page * table.rowsPerPage + table.rowsPerPage
+                        )
+                        .map((row) => (
+                          <UserTableRow
+                            key={row.id}
+                            row={row}
+                            selected={table.selected.includes(row.id)}
+                            onSelectRow={() => table.onSelectRow(row.id)}
+                          />
+                        ))}
+
+                      <TableEmptyRows
+                        height={table.dense ? 56 : 56 + 20}
+                        emptyRows={emptyRows(table.page, table.rowsPerPage, dataFiltered.length)}
                       />
-                    ))}
 
-                  <TableEmptyRows
-                    height={table.dense ? 56 : 56 + 20}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, dataFiltered.length)}
-                  />
+                      <TableNoData notFound={notFound} />
+                    </TableBody>
+                  </Table>
+                </Scrollbar>
+              </Box>
+            </Box>
 
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </Box>
-
-          <TablePaginationCustom
-            page={table.page}
-            dense={table.dense}
-            count={dataFiltered.length}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onChangeDense={table.onChangeDense}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-          />
-        </Card>
+            <TablePaginationCustom
+              page={table.page}
+              dense={table.dense}
+              count={dataFiltered.length}
+              rowsPerPage={table.rowsPerPage}
+              onPageChange={table.onChangePage}
+              onChangeDense={table.onChangeDense}
+              onRowsPerPageChange={table.onChangeRowsPerPage}
+            />
+          </Card>
       </DashboardContent>
-
-      <ConfirmDialog
-      />
+      <ConfirmDialog open={confirm.value} onClose={confirm.onFalse} />
     </>
   );
 }
 
 function applyFilter({ inputData, comparator, filters }) {
-  const { firstName, lastName } = filters;
+  const { firstName, lastName, status } = filters;
 
   // inputData'nın bir dizi olup olmadığını kontrol edin
   if (!Array.isArray(inputData)) {
@@ -272,14 +278,18 @@ function applyFilter({ inputData, comparator, filters }) {
 
   if (firstName) {
     inputData = inputData.filter((user) =>
-      user.customerFirstName.toLowerCase().includes(firstName.toLowerCase())
+      user.firstName.toLowerCase().includes(firstName.toLowerCase())
     );
   }
 
   if (lastName) {
     inputData = inputData.filter((user) =>
-      user.customerLastName.toLowerCase().includes(lastName.toLowerCase())
+      user.lastName.toLowerCase().includes(lastName.toLowerCase())
     );
+  }
+
+  if (status !== 'all') {
+    inputData = inputData.filter((user) => user.status === status);
   }
 
   return inputData;
