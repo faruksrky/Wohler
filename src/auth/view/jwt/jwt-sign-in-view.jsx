@@ -4,15 +4,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -48,10 +45,7 @@ export function JwtSignInView() {
 
   const password = useBoolean();
 
-  const defaultValues = {
-    username: 'sinan@gmail.com',
-    password: '123456',
-  };
+  const defaultValues = { username: '', password: '' };
 
   const methods = useForm({
     resolver: zodResolver(SignInSchema),

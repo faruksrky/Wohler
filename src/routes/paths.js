@@ -1,4 +1,4 @@
-import { _id, _postTitles } from 'src/_mock/assets';
+
 // ----------------------------------------------------------------------
 
 
@@ -8,7 +8,6 @@ const ROOTS = {
 };
 
 // ----------------------------------------------------------------------
-const MOCK_ID = _id[1];
 export const paths = {
   faqs: '/faqs',
   minimalStore: 'https://mui.com/store/items/minimal-dashboard/',
