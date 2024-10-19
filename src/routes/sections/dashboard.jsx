@@ -50,7 +50,6 @@ export const dashboardRoutes = [
         children: [
           { path: 'list', element: <UserListPage /> },
           { path: 'new', element: <UserCreatePage /> },
-          { path: ':id/edit', element: <UserEditPage /> },
         ],
       },
     ],

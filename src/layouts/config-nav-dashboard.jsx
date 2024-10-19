@@ -60,7 +60,6 @@ export const navData = [
         children: [
           { title: 'Kullanıcı Listesi', path: paths.dashboard.user.list },
           { title: 'Yeni Kullanıcı', path: paths.dashboard.user.new },
-          { title: 'Güncelle', path: paths.dashboard.user.demo.edit },
         ],
       },
       
