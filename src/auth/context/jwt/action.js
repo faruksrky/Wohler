@@ -11,42 +11,48 @@ import {CONFIG} from '../../../config-global';
  *************************************** */
 export const signInWithPassword = async ({ username, password }) => {
 
-  const params = qs.stringify(
-    { username, password },
-    { arrayFormat: 'brackets' }
-  );
-  
-  try {
-    const res = await axios.post(CONFIG.loginUrl, params, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
-    
+  console.log("username", username);
+  console.log("password", password);
+
+    const params = qs.stringify(
+      { username, password },
+      { arrayFormat: 'brackets' }
+    );
+
+    console.log("params", params);
+    console.log("CONFIG.loginUrl", CONFIG.loginUrl);
+
+    try {
+      const res = await axios.post(CONFIG.loginUrl, params, 
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
+    );
     console.log("res data", res.data); // Dönen veriyi kontrol et
-  
+
     // istek başarılı olursa, gelen verileri accessToken değişkenine atıyoruz
     const accessToken = res.data.access_token;
-  
+
     if (!accessToken) {
       throw new Error('Access Token bulunamadı');
     }
-    setSession(accessToken, username); 
+    setSession(accessToken,username);
+
   } catch (error) {
     if (error.response) {
-      // Sunucudan dönen hata kodunu ve detayları göster
-      console.error('Response error:', error.response.status, error.response.data);
-    } else if (error.request) {
-      // İstek yapılmış ama sunucudan yanıt gelmemiş
-      console.error('Request error (Sunucudan yanıt yok):', error.request);
-    } else {
-      // Diğer bir hata (örneğin, yapılandırma hatası)
-      console.error('Error:', error.message);
+      console.error(error.response.data);
+      console.log('Response error:', error.response.status, error.response.data);
     }
-    console.log('Error try disi:', error);
+    else if(error.request){
+      console.error (error.request);
+    }
+    console.error('Sunucu yanıt veremedi', error);
+    console.log('Error tried', error.message);
+    throw error;
   }
-};
-
+}
 
 /** **************************************
  * Sign up
