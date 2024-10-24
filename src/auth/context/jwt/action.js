@@ -45,7 +45,7 @@ export const signInWithPassword = async ({ username, password }) => {
     }
     console.log('Error try disi:', error);
   }
-    
+};
 
 
 /** **************************************
