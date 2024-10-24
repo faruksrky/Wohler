@@ -24,6 +24,7 @@ export const signInWithPassword = async ({ username, password }) => {
         },
       }
     );
+    console.log(res.data); // Dönen veriyi kontrol et
 
     // istek başarılı olursa, gelen verileri accessToken değişkenine atıyoruz
     const accessToken = res.data.access_token;
@@ -36,11 +37,13 @@ export const signInWithPassword = async ({ username, password }) => {
   } catch (error) {
     if (error.response) {
       console.error(error.response.data);
+      console.log('Response error:', error.response.status, error.response.data);
     }
     else if(error.request){
       console.error (error.request);
     }
     console.error('Sunucu yanıt veremedi', error);
+    console.log('Error', error.message);
     throw error;
   }
 }
