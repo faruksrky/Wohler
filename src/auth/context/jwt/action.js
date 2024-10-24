@@ -11,42 +11,42 @@ import {CONFIG} from '../../../config-global';
  *************************************** */
 export const signInWithPassword = async ({ username, password }) => {
 
-    const params = qs.stringify(
-      { username, password },
-      { arrayFormat: 'brackets' }
-    );
-
-    try {
-      const res = await axios.post(CONFIG.loginUrl, params, 
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      }
-    );
+  const params = qs.stringify(
+    { username, password },
+    { arrayFormat: 'brackets' }
+  );
+  
+  try {
+    const res = await axios.post(CONFIG.loginUrl, params, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+    
     console.log("res data", res.data); // Dönen veriyi kontrol et
-
+  
     // istek başarılı olursa, gelen verileri accessToken değişkenine atıyoruz
     const accessToken = res.data.access_token;
-
+  
     if (!accessToken) {
       throw new Error('Access Token bulunamadı');
     }
-    setSession(accessToken,username);
-
+    setSession(accessToken, username);
   } catch (error) {
     if (error.response) {
-      console.error(error.response.data);
-      console.log('Response error:', error.response.status, error.response.data);
+      // Sunucudan dönen hata kodunu ve detayları göster
+      console.error('Response error:', error.response.status, error.response.data);
+    } else if (error.request) {
+      // İstek yapılmış ama sunucudan yanıt gelmemiş
+      console.error('Request error (Sunucudan yanıt yok):', error.request);
+    } else {
+      // Diğer bir hata (örneğin, yapılandırma hatası)
+      console.error('Error:', error.message);
     }
-    else if(error.request){
-      console.error (error.request);
-    }
-    console.error('Sunucu yanıt veremedi', error);
-    console.log('Error try disi', error);
-    throw error;
+    console.log('Error try disi:', error);
   }
-}
+    
+
 
 /** **************************************
  * Sign up
