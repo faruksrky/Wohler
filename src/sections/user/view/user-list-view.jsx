@@ -67,6 +67,10 @@ export function UserListView() {
   const accessToken = sessionStorage.getItem(STORAGE_KEY);
 
   useEffect(() => {
+
+    console.log('accessToken', accessToken);
+    console.log('CONFIG.usersListUrl', CONFIG.usersListUrl);
+
     const fetchData = async () => {
       try {
         const response = await axios.get(CONFIG.usersListUrl, {
@@ -74,6 +78,7 @@ export function UserListView() {
             Authorization: `Bearer ${accessToken}`
           }
         });
+        console.log('response', response);
         setTableData(response.data);
       } catch (error) {
         console.error('error', error);
