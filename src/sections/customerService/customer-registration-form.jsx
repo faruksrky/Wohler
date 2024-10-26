@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { Card } from '@mui/material';
 
@@ -23,6 +23,7 @@ export function CustomerRegistrationForm({ incomingData }) {
     notes: '',
   });
 
+  const [responseData, setResponseData] = useState(null);
   const accessToken = sessionStorage.getItem(STORAGE_KEY);
 
   useEffect(() => {
@@ -31,39 +32,47 @@ export function CustomerRegistrationForm({ incomingData }) {
     }
   }, [incomingData]);
 
-  useEffect(() => {
-    const postData = async () => {
-      try {
-        const response = await fetch('https://customer.boostergin.com/api/service-requests', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify(formData),
-        });
+  const postData = useCallback(async (data) => {
+    try {
+      const response = await fetch('https://customer.boostergin.com/api/service-requests', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(data),
+      });
 
-        console.log('Response:', response);
-
-        if (response.ok) {
-          alert('Müşteri başarıyla kaydedildi!');
-        } else {
-          alert('Müşteri kaydedilirken bir hata oluştu.');
-        }
-      } catch (error) {
-        console.error('Error:', error);
+      if (response.ok) {
+        const result = await response.json();
+        setResponseData(result);
+      } else {
         alert('Müşteri kaydedilirken bir hata oluştu.');
       }
-    };
-
-    if (formData.customerFirstName) {
-      postData();
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Müşteri kaydedilirken bir hata oluştu.');
     }
-  }, [formData, accessToken]);
+  }, [accessToken]); // Add accessToken as a dependency
+
+  useEffect(() => {
+    if (Object.values(formData).some(field => field)) {
+      postData(formData);
+    }
+  }, [formData, postData]); // Include postData in the dependency array
 
   return (
     <Card sx={{ p: 3, maxWidth: 600, mx: 'auto' }}>
+      <h2>Müşteri Bilgileri</h2>
+      <pre>{JSON.stringify(formData, null, 2)}</pre> {/* Önceki verileri görüntülemek için */}
+      {responseData && (
+        <div>
+          <h3>Müşteri Başarıyla Kaydedildi!</h3>
+          <pre>{JSON.stringify(responseData, null, 2)}</pre>
+        </div>
+      )}
       <p>Veriler otomatik olarak kaydediliyor...</p>
     </Card>
   );
 }
+
