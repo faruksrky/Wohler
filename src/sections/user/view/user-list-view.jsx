@@ -82,11 +82,15 @@ export function UserListView() {
         setTableData(response.data);
       } catch (error) {
         console.error('error', error);
+        console.log('error.response', error.response);
       }
+      setLoading(false);
     };
     fetchData();
   }, [accessToken]); // Include 'accessToken' in the dependency array
   
+  console.log('tableData', tableData);
+
   // Rest of the code...
   
 
