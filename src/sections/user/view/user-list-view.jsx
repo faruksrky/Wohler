@@ -68,9 +68,6 @@ export function UserListView() {
 
   useEffect(() => {
 
-    console.log('accessToken', accessToken);
-    console.log('CONFIG.usersListUrl', CONFIG.usersListUrl);
-
     const fetchData = async () => {
       try {
         const response = await axios.get(CONFIG.usersListUrl, {
@@ -78,18 +75,14 @@ export function UserListView() {
             Authorization: `Bearer ${accessToken}`
           }
         });
-        console.log('response', response);
         setTableData(response.data);
       } catch (error) {
         console.error('error', error);
-        console.log('error.response', error.response);
       }
       setLoading(false);
     };
     fetchData();
   }, [accessToken]); // Include 'accessToken' in the dependency array
-  
-  console.log('tableData', tableData);
 
   // Rest of the code...
   
