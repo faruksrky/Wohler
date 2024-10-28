@@ -17,7 +17,7 @@ export const SERVICE_COMPLETION_STATUS_OPTIONS = [
 ];
 
 export const WARRANTY_STATUS_OPTIONS = [
-  { value: 'Aktif', label: 'Aktif' },
+  { value: 'Garantili', label: 'Garantili' },
   { value: 'Garanti_Dışı', label: 'Garanti_Dışı' },
   { value: 'Bilinmiyor', label: 'Bilinmiyor' },
 ];
