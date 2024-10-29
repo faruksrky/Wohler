@@ -67,6 +67,7 @@ export function UserListView() {
   const accessToken = sessionStorage.getItem(STORAGE_KEY);
 
   useEffect(() => {
+
     const fetchData = async () => {
       try {
         const response = await axios.get(CONFIG.usersListUrl, {
@@ -78,10 +79,11 @@ export function UserListView() {
       } catch (error) {
         console.error('error', error);
       }
+      setLoading(false);
     };
     fetchData();
   }, [accessToken]); // Include 'accessToken' in the dependency array
-  
+
   // Rest of the code...
   
 

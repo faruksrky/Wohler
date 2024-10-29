@@ -12,7 +12,7 @@ export const fetchData = async () => {
 
     return { data, userNames };
   } catch (error) {
-    console.error('Error fetching data', error);
+    console.error('Kullanıcı adlarını çekerken hata oluştu..', error);
     return { data: [], userNames: [] };
   }
 };
@@ -23,7 +23,7 @@ export const fetchCustomerList = async () => {
     const data = Array.isArray(response.data) ? response.data : [];
     return data;
   } catch (error) {
-    console.error('Error fetching customer list', error);
+    console.error('Müşteri listesini çekerken hata oluştu..', error);
     return [];
   }
 };
