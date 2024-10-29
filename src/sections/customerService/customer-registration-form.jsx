@@ -4,6 +4,8 @@ import { Card } from '@mui/material';
 
 import { STORAGE_KEY } from 'src/auth/context/jwt/constant';
 
+import {CONFIG} from '../../config-global';  
+ 
 export function CustomerRegistrationForm({ incomingData }) {
   const [formData, setFormData] = useState({
     customerFirstName: '',
@@ -34,7 +36,7 @@ export function CustomerRegistrationForm({ incomingData }) {
 
   const postData = useCallback(async (data) => {
     try {
-      const response = await fetch('https://customer.boostergin.com/api/service-requests', {
+      const response = await fetch(CONFIG.customerListUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

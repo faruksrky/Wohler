@@ -14,7 +14,7 @@ export function EmptyContent({
   filled,
   slotProps,
   description,
-  title = 'No data',
+  title = 'Veri bulunamadı',
   ...other
 }) {
   return (
@@ -25,6 +25,7 @@ export function EmptyContent({
       sx={{
         px: 3,
         height: 1,
+        md: { px: 5 },
         ...(filled && {
           borderRadius: 2,
           bgcolor: (theme) => varAlpha(theme.vars.palette.grey['500Channel'], 0.04),

@@ -17,7 +17,7 @@ export function Section({
   layoutQuery,
   methods,
   title = 'Direct Nexus',
-  imgUrl = `${CONFIG.assetsDir}/assets/illustrations/illustration-dashboard.webp`,
+  imgUrl = `${CONFIG.assetsDir}/assets/illustrations/illustration-techguy.webp`,
   subtitle = 'Sağlığınız kontrol altında',
   ...other
 }) {
@@ -52,12 +52,12 @@ export function Section({
       {...other}
     >
       <div>
-        <Typography variant="h3" sx={{ textAlign: 'center' }}>
+        <Typography variant="h2" sx={{ textAlign: 'center' }}>
           {title}
         </Typography>
 
         {subtitle && (
-          <Typography sx={{ color: 'text.secondary', textAlign: 'center', mt: 2 }}>
+          <Typography sx={{ color: 'text.secondary', textAlign: 'center', mt: 2, fontWeight: 'bold' }}>
             {subtitle}
           </Typography>
         )}
@@ -67,7 +67,7 @@ export function Section({
         component="img"
         alt="Dashboard illustration"
         src={imgUrl}
-        sx={{ width: 1, aspectRatio: '4/3', objectFit: 'cover' }}
+        sx={{ width: 0.9, aspectRatio: '1', objectFit: 'cover' }}
       />
 
       {!!methods?.length && method && (

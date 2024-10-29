@@ -44,7 +44,7 @@ export function SettingsDrawer({
   const renderHead = (
     <Box display="flex" alignItems="center" sx={{ py: 2, pr: 1, pl: 2.5 }}>
       <Typography variant="h6" sx={{ flexGrow: 1 }}>
-        Settings
+        Ayarlar
       </Typography>
 
       <FullScreenButton />
@@ -62,7 +62,7 @@ export function SettingsDrawer({
         </IconButton>
       </Tooltip>
 
-      <Tooltip title="Close">
+      <Tooltip title="Çıkış">
         <IconButton onClick={settings.onCloseDrawer}>
           <Iconify icon="mingcute:close-line" />
         </IconButton>
@@ -72,7 +72,7 @@ export function SettingsDrawer({
 
   const renderMode = (
     <BaseOption
-      label="Dark mode"
+      label="Karanlık Mod"
       icon="moon"
       selected={settings.colorScheme === 'dark'}
       onClick={() => {
@@ -95,7 +95,7 @@ export function SettingsDrawer({
 
   const renderRTL = (
     <BaseOption
-      label="Right to left"
+      label="Sağdan sola"
       icon="align-right"
       selected={settings.direction === 'rtl'}
       onClick={() =>
@@ -107,7 +107,7 @@ export function SettingsDrawer({
   const renderCompact = (
     <BaseOption
       tooltip="Dashboard only and available at large resolutions > 1600px (xl)"
-      label="Compact"
+      label="Kompakt"
       icon="autofit-width"
       selected={settings.compactLayout}
       onClick={() => settings.onUpdateField('compactLayout', !settings.compactLayout)}
@@ -133,7 +133,7 @@ export function SettingsDrawer({
     <NavOptions
       value={{
         color: settings.navColor,
-        layout: settings.navLayout,
+        layout  : settings.navLayout,
       }}
       onClickOption={{
         color: (newValue) => settings.onUpdateField('navColor', newValue),

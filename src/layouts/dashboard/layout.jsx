@@ -13,11 +13,13 @@ import { NavMobile } from './nav-mobile';
 import { layoutClasses } from '../classes';
 import { NavVertical } from './nav-vertical';
 import { NavHorizontal } from './nav-horizontal';
+import { _account } from '../config-nav-account'; 
 import { Searchbar } from '../components/searchbar';
 import { MenuButton } from '../components/menu-button';
 import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
 import { StyledDivider, useNavColorVars } from './styles';
+import { AccountDrawer } from '../components/account-drawer';
 import { SettingsButton } from '../components/settings-button';
 import { navData as dashboardNavData } from '../config-nav-dashboard';
 
@@ -147,14 +149,13 @@ export function DashboardLayout({ sx, children, header, data }) {
                 {/* 
                 <ContactsPopover data={_contacts} />
                 */}
-              
-                {/* -- Account drawer -- */}
-                {/* 
-                <AccountDrawer data={_account} />
-              */}
-
                   {/* -- Settings button -- */}
                   <SettingsButton />
+              
+                {/* -- Account drawer -- */}
+                <AccountDrawer data={_account} />
+
+                
 
               </Box>
             ),
