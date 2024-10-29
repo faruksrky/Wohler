@@ -190,7 +190,7 @@ export function CustomerServiceListView() {
             <CustomerTableToolbar
               filters={filters}
               onResetPage={table.onResetPage}
-              userNames={userNames}
+              options={{ roles: userNames }}
             />
             {canReset && (
               <CustomerTableFiltersResult
@@ -310,7 +310,7 @@ function applyFilter({ inputData, comparator, filters }) {
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (role.length) {
-    inputData = inputData.filter((user) => role.includes(user.role));
+    inputData = inputData.filter((user) => role.includes(user.servicePersonnel));
   }
 
   if (name) {

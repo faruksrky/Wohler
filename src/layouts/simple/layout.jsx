@@ -8,8 +8,10 @@ import { RouterLink } from 'src/routes/components';
 import { Logo } from 'src/components/logo';
 
 import { Main, CompactContent } from './main';
+import { _account } from '../config-nav-account';
 import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
+import { AccountDrawer } from '../components/account-drawer';
 import { SettingsButton } from '../components/settings-button';
 
 // ----------------------------------------------------------------------
@@ -47,6 +49,8 @@ export function SimpleLayout({ sx, children, header, content }) {
                 </Link>
                 {/* -- Settings button -- */}
                 <SettingsButton />
+                {/* -- Account drawer -- */}
+                <AccountDrawer data={_account} />
               </Box>
             ),
           }}

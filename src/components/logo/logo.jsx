@@ -5,6 +5,8 @@ import { useTheme } from '@mui/material/styles';
 
 import { RouterLink } from 'src/routes/components';
 
+import { CONFIG } from 'src/config-global';
+
 import { logoClasses } from './classes';
 
 // ----------------------------------------------------------------------
@@ -23,14 +25,12 @@ export const Logo = forwardRef(
     const PRIMARY_MAIN = theme.vars.palette.primary.main;
     const PRIMARY_DARKER = theme.vars.palette.primary.dark;
 
-    /*
-  * OR using local (public folder)
-  *
+
   const singleLogo = (
     <Box
       alt="Single logo"
       component="img"
-      src={`${CONFIG.assetsDir}/logo/logo-single.svg`}
+      src={`${CONFIG.assetsDir}/logo/logo-direct.svg`}
       width="100%"
       height="100%"
     />
@@ -45,9 +45,8 @@ export const Logo = forwardRef(
       height="100%"
     />
   );
-  *
-  */
-
+  
+  /*
     const singleLogo = (
       <svg
         width="100%"
@@ -177,15 +176,16 @@ export const Logo = forwardRef(
         </defs>
       </svg>
     );
-
+*/
     const baseSize = {
-      width: width ?? 40,
+      width: width ?? 90,
       height: height ?? 40,
       ...(!isSingle && {
         width: width ?? 102,
         height: height ?? 36,
       }),
     };
+
 
     return (
       <Box

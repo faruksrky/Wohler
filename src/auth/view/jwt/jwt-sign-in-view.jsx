@@ -87,7 +87,7 @@ export function JwtSignInView() {
         <Field.Text
           name="password"
           label="Şifre"
-          placeholder="6+ characters"
+          placeholder="6+ karakter"
           type={password.value ? 'text' : 'password'}
           InputLabelProps={{ shrink: true }}
           InputProps={{

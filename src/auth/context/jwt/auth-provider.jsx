@@ -29,7 +29,7 @@ export function AuthProvider({ children }) {
           : jwtDecodeModule(accessToken); // default varsa kullan, yoksa modülü direkt kullan
 
        const { given_name: user, email } = decodedToken;
-          
+       sessionStorage.setItem('decoded_token', JSON.stringify(decodedToken));
        setState({ user: {user, email, accessToken }, loading: false });
       } else {
         setState({ user: null, email: null, loading: false });

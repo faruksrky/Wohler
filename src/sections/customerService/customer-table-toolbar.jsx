@@ -17,7 +17,7 @@ import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export function CustomerTableToolbar({ filters, onResetPage, userNames }) {
+export function CustomerTableToolbar({ filters, options, onResetPage }) {
   const popover = usePopover();
 
   const handleFilterName = useCallback(
@@ -59,15 +59,14 @@ export function CustomerTableToolbar({ filters, onResetPage, userNames }) {
             inputProps={{ id: 'user-filter-role-select-label' }}
             MenuProps={{ PaperProps: { sx: { maxHeight: 240 } } }}
           >
-            {(userNames || []).map((userName) => (
-              <MenuItem key={userName} value={userName}>
+             {options.roles.map((option) => (
+              <MenuItem key={option} value={option}>
                 <Checkbox
-                  id={userName.toString()}
                   disableRipple
                   size="small"
-                  checked={filters.state.role.includes(userName)}
+                  checked={filters.state.role.includes(option)}
                 />
-                {userName}
+                {option}
               </MenuItem>
             ))}
           </Select>

@@ -43,7 +43,7 @@ export function CustomerTableFiltersResult({ filters, onResetPage, totalResults,
         />
       </FiltersBlock>
 
-      <FiltersBlock label="Role:" isShow={!!filters.state.role.length}>
+      <FiltersBlock label="Servis Personeli:" isShow={!!filters.state.role.length}>
         {filters.state.role.map((item) => (
           <Chip {...chipProps} key={item} label={item} onDelete={() => handleRemoveRole(item)} />
         ))}

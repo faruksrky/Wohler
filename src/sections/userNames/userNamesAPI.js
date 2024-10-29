@@ -9,8 +9,6 @@ const accessToken = sessionStorage.getItem(STORAGE_KEY);
 
 let _userNames = [];
 
-
-
 const fetchUserNames = async () => {
   try {
     const response = await axios.get(CONFIG.usersListUserName, {
