@@ -24,32 +24,37 @@ function calculateWidth(text) {
   return context.measureText(text).width;
 }
 
-export function CustomerTableRow({ row, selected, onEditRow, onSelectRow, userNames, fetchData }) {
+export function CustomerTableRow({ row, selected, onEditRow, onSelectRow, userNames, fetchData, operationPerformedList }) {
   const confirm = useBoolean();
   const quickEdit = useBoolean();
   const popover = usePopover();
 
+  const handleDoubleClick = () => {
+    quickEdit.onTrue(); // Çift tıklama ile düzenleme modunu aç
+  };
+
   return (
     <>
-      <TableRow hover selected={selected} aria-checked={selected} tabIndex={-1}>
+      <TableRow hover selected={selected} aria-checked={selected} tabIndex={-1} >
         <TableCell padding="checkbox">
           <Checkbox id={row.id.toString()} checked={selected} onClick={onSelectRow} />
         </TableCell>
-        <TableCell style={{ width: calculateWidth(row.customerFirstName) }} sx={{ whiteSpace: 'nowrap' }}>{row.customerFirstName}</TableCell>
-        <TableCell style={{ width: calculateWidth(row.customerLastName) }} sx={{ whiteSpace: 'nowrap' }}>{row.customerLastName}</TableCell>
-        <TableCell style={{ width: calculateWidth(row.phoneNumber) }} sx={{ whiteSpace: 'nowrap' }}>{row.phoneNumber}</TableCell>
-        <TableCell style={{ width: calculateWidth(row.emailAddress) }} sx={{ whiteSpace: 'nowrap' }}>{row.emailAddress}</TableCell>
-        <TableCell style={{ width: calculateWidth(row.address) }} sx={{ whiteSpace: 'nowrap' }}>{row.address}</TableCell>
-        <TableCell style={{ width: calculateWidth(row.productName) }} sx={{ whiteSpace: 'nowrap' }}>{row.productName}</TableCell>
-        <TableCell style={{ width: calculateWidth(row.faultDescription) }} sx={{ whiteSpace: 'nowrap' }}>{row.faultDescription}</TableCell>
-        <TableCell style={{ width: calculateWidth(row.faultDate) }} sx={{ whiteSpace: 'nowrap' }}>{row.faultDate}</TableCell>
-        <TableCell style={{ width: calculateWidth(row.servicePersonnel) }} sx={{ whiteSpace: 'nowrap' }}>{row.servicePersonnel}</TableCell>
-        <TableCell style={{ width: calculateWidth(row.warrantyStatus) }} sx={{ whiteSpace: 'nowrap' }}>{row.warrantyStatus}</TableCell>
-        <TableCell style={{ width: calculateWidth(row.cargoStatus) }} sx={{ whiteSpace: 'nowrap' }}>{row.cargoStatus}</TableCell>
-        <TableCell style={{ width: calculateWidth(row.serviceCompletionStatus) }} sx={{ whiteSpace: 'nowrap' }}>{row.serviceCompletionStatus}</TableCell>
-        <TableCell style={{ width: calculateWidth(row.operationDate) }} sx={{ whiteSpace: 'nowrap' }}>{row.operationDate}</TableCell>
-        <TableCell style={{ width: calculateWidth(row.deliveryDate) }} sx={{ whiteSpace: 'nowrap' }}>{row.deliveryDate}</TableCell>
-        <TableCell style={{ width: calculateWidth(row.notes) }} sx={{ whiteSpace: 'nowrap' }}>{row.notes}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.customerFirstName) }} sx={{ whiteSpace: 'nowrap' }}>{row.customerFirstName}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.customerLastName) }} sx={{ whiteSpace: 'nowrap' }}>{row.customerLastName}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.phoneNumber) }} sx={{ whiteSpace: 'nowrap' }}>{row.phoneNumber}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.emailAddress) }} sx={{ whiteSpace: 'nowrap' }}>{row.emailAddress}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.address) }} sx={{ whiteSpace: 'nowrap' }}>{row.address}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.productName) }} sx={{ whiteSpace: 'nowrap' }}>{row.productName}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.faultDescription) }} sx={{ whiteSpace: 'nowrap' }}>{row.faultDescription}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.faultDate) }} sx={{ whiteSpace: 'nowrap' }}>{row.faultDate}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.servicePersonnel) }} sx={{ whiteSpace: 'nowrap' }}>{row.servicePersonnel}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.operationPerformed) }} sx={{ whiteSpace: 'nowrap' }}>{row.operationPerformed}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.warrantyStatus) }} sx={{ whiteSpace: 'nowrap' }}>{row.warrantyStatus}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.cargoStatus) }} sx={{ whiteSpace: 'nowrap' }}>{row.cargoStatus}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.serviceCompletionStatus) }} sx={{ whiteSpace: 'nowrap' }}>{row.serviceCompletionStatus}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.operationDate) }} sx={{ whiteSpace: 'nowrap' }}>{row.operationDate}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.deliveryDate) }} sx={{ whiteSpace: 'nowrap' }}>{row.deliveryDate}</TableCell>
+        <TableCell onDoubleClick={quickEdit.onTrue} style={{ width: calculateWidth(row.notes) }} sx={{ whiteSpace: 'nowrap' }}>{row.notes}</TableCell>
           <TableCell>
           <Stack direction="row" alignItems="center">
             <Tooltip title="Tabloya Ekle" placement="top" arrow>
@@ -68,6 +73,7 @@ export function CustomerTableRow({ row, selected, onEditRow, onSelectRow, userNa
       open={quickEdit.value} 
       onClose={quickEdit.onFalse} 
       userNamesFromQuick={userNames}
+      operationPerformedList={operationPerformedList}
       fetchData={fetchData}
       />
 
