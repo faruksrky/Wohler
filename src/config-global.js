@@ -13,6 +13,7 @@ export const CONFIG = {
   usersListUserName: import.meta.env.VITE_USERS_LISTUSERNAME_URL ?? '',
   customerListUrl: import.meta.env.VITE_CUSTOMER_LIST_URL ?? '',
   customerUpdateUrl: import.meta.env.VITE_CUSTOMER_UPDATE_URL ?? '',
+  customerOperationPerformedUrl: import.meta.env.VITE_CUSTOMER_OPERATION_PERFORMED_URL ?? '',
   signUpUrl: import.meta.env.VITE_SIGNUP_URL ?? '',
   assetsDir: import.meta.env.VITE_ASSETS_DIR ?? '',
   /**

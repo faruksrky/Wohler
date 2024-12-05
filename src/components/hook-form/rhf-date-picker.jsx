@@ -18,9 +18,11 @@ export function RHFDatePicker({ name, slotProps, ...other }) {
       render={({ field, fieldState: { error } }) => (
         <DatePicker
           {...field}
-          value={dayjs(field.value)}
-          onChange={(newValue) => field.onChange(dayjs(newValue).format())}
-          format={formatStr.split.date}
+          value={field.value ? dayjs(field.value, 'YYYY-MM-DD') : null} // Tarihi formatla
+          onChange={(newValue) => {
+            const formattedDate = dayjs(newValue).format('YYYY-MM-DD'); // Yıl-ay-gün formatı
+            field.onChange(formattedDate); // Form alanını güncelle
+          }}
           slotProps={{
             ...slotProps,
             textField: {
@@ -37,8 +39,8 @@ export function RHFDatePicker({ name, slotProps, ...other }) {
   );
 }
 
-// ----------------------------------------------------------------------
 
+// ----------------------------------------------------------------------
 export function RHFMobileDateTimePicker({ name, slotProps, ...other }) {
   const { control } = useFormContext();
 
@@ -49,9 +51,11 @@ export function RHFMobileDateTimePicker({ name, slotProps, ...other }) {
       render={({ field, fieldState: { error } }) => (
         <MobileDateTimePicker
           {...field}
-          value={dayjs(field.value)}
-          onChange={(newValue) => field.onChange(dayjs(newValue).format())}
-          format={formatStr.split.dateTime}
+          value={field.value ? dayjs(field.value, 'YYYY-MM-DD') : null} // Tarihi formatla
+          onChange={(newValue) => {
+            const formattedDate = dayjs(newValue).format('YYYY-MM-DD'); // Yıl-ay-gün formatı
+            field.onChange(formattedDate); // Form alanını güncelle
+          }}
           slotProps={{
             textField: {
               fullWidth: true,

@@ -1,22 +1,24 @@
 import axios from 'axios';
+import dayjs from 'dayjs';
 import { z as zod } from 'zod';
 import { useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, Controller } from 'react-hook-form';
 import { isValidPhoneNumber } from 'react-phone-number-input/input';
 
 import Box from '@mui/material/Box';
 import MuiAlert from '@mui/lab/Alert';
-import Alert from '@mui/material/Alert';
-import { Snackbar } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import MenuItem from '@mui/material/MenuItem';
+import { Alert, Snackbar } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import DialogTitle from '@mui/material/DialogTitle';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
+import DialogContent from '@mui/material/DialogContent'; // Import the 'AdapterDateFns' module
 
+import { LocalizationProvider } from 'src/locales';
 import {
   CARGO_STATUS_OPTIONS,
   WARRANTY_STATUS_OPTIONS,
@@ -40,6 +42,7 @@ export const CustomerQuickEditSchema = zod.object({
   faultDate: zod.string().optional(),
   servicePersonnel: zod.string().optional(),
   serviceCompletionStatus: zod.string().optional(),
+  operationPerformed: zod.string().optional(),
   warrantyStatus: zod.string().optional(),
   cargoStatus: zod.string().optional(),
   operationDate: zod.string().optional(),
@@ -55,6 +58,7 @@ export function CustomerQuickEditForm({
   onClose,
   fetchData,
   userNamesFromQuick,
+  operationPerformedList,
 }) {
   const defaultValues = useMemo(
     () => ({
@@ -69,6 +73,7 @@ export function CustomerQuickEditForm({
       faultDate: currentCustomer?.faultDate || '',
       servicePersonnel: currentCustomer?.servicePersonnel || '',
       serviceCompletionStatus: currentCustomer?.serviceCompletionStatus || '',
+      operationPerformed: currentCustomer?.operationPerformed || '',
       operationDate: currentCustomer?.operationDate || '',
       warrantyStatus: currentCustomer?.warrantyStatus || '',
       cargoStatus: currentCustomer?.cargoStatus || '',
@@ -87,6 +92,7 @@ export function CustomerQuickEditForm({
 
   const {
     reset,
+    control,
     formState: { isSubmitting },
     watch,
   } = methods;
@@ -141,6 +147,9 @@ export function CustomerQuickEditForm({
   };
 
   return (
+ 
+
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
     <Dialog
       fullWidth
       maxWidth={false}
@@ -148,65 +157,142 @@ export function CustomerQuickEditForm({
       onClose={onClose}
       PaperProps={{ sx: { maxWidth: 720 } }}
     >
+      
       <Form methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle>Müşteri Teknik Servis Bilgilerini Güncelle</DialogTitle>
 
         <DialogContent>
-          <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
-            Bilgileri girdikten sonra güncelle butonuna basınız
-          </Alert>
+  <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
+    Bilgileri girdikten sonra güncelle butonuna basınız
+  </Alert>
 
-          <Box
-            rowGap={3}
-            columnGap={2}
-            display="grid"
-            gridTemplateColumns={{ xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' }}
-          >
-            <Field.Text name="customerFirstName" label="İsim" readOnly />
-            <Field.Text name="customerLastName" label="Soyisim" readOnly />
-            <Field.Phone name="phoneNumber" label="Telefon" readOnly />
-            <Field.Text name="emailAddress" label="E-posta" readOnly />
-            <Field.Text name="address" label="Adres" readOnly />
-            <Field.Text name="productName" label="Ürün Adı" readOnly />
-            <Field.Text name="faultDescription" label="Arıza Tanımı" readOnly />
-            <Field.DatePicker name="faultDate" label="Arıza Tarihi" readOnly />
-            <Field.Select
-              name="servicePersonnel"
-              label="Servis Personeli"
-              value={servicePersonnelValue}
-            >
-              {userNamesFromQuick.map((userName) => (
-                <MenuItem key={userName} value={userName}>
-                  {userName}
-                </MenuItem>
-              ))}
-            </Field.Select>
-            <Field.Select name="serviceCompletionStatus" label="Servis Durumu">
-              {SERVICE_COMPLETION_STATUS_OPTIONS.map((serviceCompletionStatus) => (
-                <MenuItem key={serviceCompletionStatus.value} value={serviceCompletionStatus.value}>
-                  {serviceCompletionStatus.label}
-                </MenuItem>
-              ))}
-            </Field.Select>
-            <Field.Select name="warrantyStatus" label="Garanti Durumu">
-              {WARRANTY_STATUS_OPTIONS.map((warrantyStatus) => (
-                <MenuItem key={warrantyStatus.value} value={warrantyStatus.value}>
-                  {warrantyStatus.label}
-                </MenuItem>
-              ))}
-            </Field.Select>
-            <Field.Select name="cargoStatus" label="Kargo Durumu">
-              {CARGO_STATUS_OPTIONS.map((cargoStatus) => (
-                <MenuItem key={cargoStatus.value} value={cargoStatus.value}>
-                  {cargoStatus.label}
-                </MenuItem>
-              ))}
-            </Field.Select>
-            <Field.DatePicker name="operationDate" label="Operasyon Tarihi" />
-            <Field.DatePicker name="deliveryDate" label="Teslim Tarihi" />
-            <Field.Text name="notes" label="Notlar" />
-          </Box>
-        </DialogContent>
+  <Box
+    rowGap={3}
+    columnGap={2}
+    display="grid"
+    gridTemplateColumns={{ xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' }}
+  >
+    <Field.Text name="customerFirstName" label="Ad" readOnly />
+    <Field.Text name="customerLastName" label="Soyad" readOnly />
+    <Field.Phone name="phoneNumber" label="Telefon" readOnly />
+    <Field.Text name="emailAddress" label="E-posta" readOnly />
+    <Field.Text
+  name="address"
+  label="Adres"
+  readOnly
+  multiline
+  rows={1}
+  fullWidth
+  sx={{ gridColumn: 'span 2' }}
+/>
+
+    <Field.Text name="productName" label="Ürün Adı" readOnly />
+    <Field.DatePicker name="faultDate" label="Arıza Tarihi" readOnly />
+    <Field.Text
+  name="faultDescription"
+  label="Arıza Tanımı"
+  readOnly
+  multiline
+  rows={1}
+  fullWidth
+  sx={{ gridColumn: 'span 2' }}
+/>
+    
+    <Field.Select
+      name="servicePersonnel"
+      label="Servis Personeli"
+      value={userNamesFromQuick.includes(servicePersonnelValue) ? servicePersonnelValue : ''}
+    >
+      {userNamesFromQuick.map((userName) => (
+        <MenuItem key={userName} value={userName}>
+          {userName}
+        </MenuItem>
+      ))}
+    </Field.Select>
+
+    <Field.Select name="serviceCompletionStatus" label="Servis Durumu">
+      {SERVICE_COMPLETION_STATUS_OPTIONS.map((serviceCompletionStatus) => (
+        <MenuItem key={serviceCompletionStatus.value} value={serviceCompletionStatus.value}>
+          {serviceCompletionStatus.label}
+        </MenuItem>
+      ))}
+    </Field.Select>
+
+    <Controller
+  name="operationPerformed"
+  control={control}
+  defaultValue={defaultValues.operationPerformed || ''} // Varsayılan değer string
+  render={({ field }) => (
+    <Field.Autocomplete
+      {...field}
+      label="Yapılan İşlem"
+      sx={{ gridColumn: 'span 2' }}
+      fullWidth
+      disableCloseOnSelect
+      options={Array.isArray(operationPerformedList) ? operationPerformedList : []}
+      value={field.value || ''} // Değer string olarak tutuluyor
+      getOptionLabel={(option) => (typeof option === 'string' ? option : '')}
+      renderOption={(props, option) => (
+        <li {...props} key={option}>
+          {option}
+        </li>
+      )}
+      freeSolo
+      onInputChange={(event, value) => {
+        // Kullanıcı manuel bir şey yazarsa
+        field.onChange(value);
+      }}
+      onChange={(event, value) => {
+        if (typeof value === 'string') {
+          // Manuel yazılan değeri al
+          field.onChange(value);
+        } else if (value && typeof value === 'object') {
+          // Listeden seçilen değeri al
+          field.onChange(value.label || value);
+        } else {
+          // Hiçbir değer yoksa boş string olarak ayarla
+          field.onChange('');
+        }
+      }}
+    />
+  )}
+/>
+
+
+
+
+
+    <Field.Select name="warrantyStatus" label="Garanti Durumu">
+      {WARRANTY_STATUS_OPTIONS.map((warrantyStatus) => (
+        <MenuItem key={warrantyStatus.value} value={warrantyStatus.value}>
+          {warrantyStatus.label}
+        </MenuItem>
+      ))}
+    </Field.Select>
+    <Field.Select name="cargoStatus" label="Kargo Durumu">
+      {CARGO_STATUS_OPTIONS.map((cargoStatus) => (
+        <MenuItem key={cargoStatus.value} value={cargoStatus.value}>
+          {cargoStatus.label}
+        </MenuItem>
+      ))}
+    </Field.Select>
+  
+    <Field.DatePicker name="operationDate" label="İşlem Tarihi"/>
+    <Field.DatePicker name="deliveryDate" label="Teslim Tarihi"/>
+  </Box>
+
+  {/* Notlar Alanı */}
+  <Box mt={3}>
+    <Field.Text
+      name="notes"
+      label="Notlar"
+      multiline
+      rows={2} // İki satır uzunluğunda
+      fullWidth
+    />
+  </Box>
+</DialogContent>
+
 
         <DialogActions>
           <Button variant="outlined" onClick={onClose}>
@@ -224,5 +310,6 @@ export function CustomerQuickEditForm({
         </MuiAlert>
       </Snackbar>
     </Dialog>
+    </LocalizationProvider>
   );
 }

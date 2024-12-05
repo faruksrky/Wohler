@@ -11,9 +11,10 @@ export const USER_STATUS_OPTIONS = [
 ];
 
 export const SERVICE_COMPLETION_STATUS_OPTIONS = [
-  { value: 'Beklemede', label: 'Beklemede' },
-  { value: 'Tamamlandı', label: 'Tamamlandı'},
-  { value: 'Teslim_Edildi', label: 'Teslim_Edildi' },
+  { value: 'Talebiniz_Alındı', label: 'Talebiniz_Alındı' },
+  { value: 'Ürün_Teslim_Alındı', label: 'Ürün_Teslim_Alındı'},
+  { value: 'işlem_Tamamlandı', label: 'işlem_Tamamlandı' },
+  { value: 'Kargoya_Verildi', label: 'Kargoya_Verildi' },
 ];
 
 export const WARRANTY_STATUS_OPTIONS = [

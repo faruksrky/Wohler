@@ -53,8 +53,8 @@ const calculateWidth = (content) => {
 };
 
 const TABLE_HEAD = [
-  { id: 'customerFirstName', label: 'İsim', width: calculateWidth('İsim') },
-  { id: 'customerLastName', label: 'Soyisim', width: calculateWidth('Soyisim') },
+  { id: 'customerFirstName', label: 'Ad', width: calculateWidth('Ad') },
+  { id: 'customerLastName', label: 'Soyad', width: calculateWidth('Soyad') },
   { id: 'phoneNumber', label: 'Telefon', width: calculateWidth('Telefon') },
   { id: 'emailAddress', label: 'E-Posta', width: calculateWidth('E-Posta') },
   { id: 'address', label: 'Adres', width: calculateWidth('Adres') },
@@ -62,6 +62,7 @@ const TABLE_HEAD = [
   { id: 'faultDescription', label: 'Arıza Tanımı', width: calculateWidth('Arıza Tanımı') },
   { id: 'faultDate', label: 'Arıza Tarihi', width: calculateWidth('Arıza Tarihi') },
   { id: 'servicePersonnel', label: 'Servis Personeli', width: calculateWidth('Servis Personeli') },
+  { id: 'operationPerformed', label: 'Yapılan İşlem', width: calculateWidth('Yapılan İşlem') },
   { id: 'warrantyStatus', label: 'Garanti Durumu', width: calculateWidth('Garanti Durumu') },
   { id: 'cargoStatus', label: 'Kargo Durumu', width: calculateWidth('Kargo Durumu') },
   {
@@ -83,11 +84,15 @@ export function CustomerServiceListView() {
   const confirm = useBoolean();
   const [tableData, setTableData] = useState([]);
   const [userNames, setUserNames] = useState([]);
+  const [operationPerformedList, setOperationPerformedList] = useState([]);
 
   const fetchData = async () => {
     const result = await fetchCustomerList();
+    const distinctOperations = result.flatMap(row => row.operationPerformed || []);
+    setOperationPerformedList([...new Set(distinctOperations)]); // Benzersiz array
     setTableData(result);
   };
+  
 
   useEffect(() => {
     fetchData();
@@ -171,18 +176,20 @@ export function CustomerServiceListView() {
                         'soft'
                       }
                       color={
-                        (tab.value === 'Teslim_Edildi' && 'success') ||
-                        (tab.value === 'Tamamlandı' && 'warning') ||
-                        (tab.value === 'Beklemede' && 'error') ||
+                        (tab.value === 'Kargoya_Verildi' && 'success') ||
+                        (tab.value === 'Talebiniz_Alındı' && 'info') ||
+                        (tab.value === 'Ürün_Teslim_Alındı' && 'info') ||
+                        (tab.value === 'işlem_Tamamlandı' && 'warning') ||
                         'default'
                       }
                     >
-                      {['Teslim_Edildi', 'Tamamlandı', 'Beklemede'].includes(tab.value)
+                      {['Kargoya_Verildi', 'Talebiniz_Alındı', 'Ürün_Teslim_Alındı', 'işlem_Tamamlandı'].includes(tab.value)
                         ? tableData.filter((user) => user.serviceCompletionStatus === tab.value)
                             .length
                         : tableData.length}
                     </Label>
                   }
+
                 />
               ))}
             </Tabs>
@@ -258,6 +265,7 @@ export function CustomerServiceListView() {
                             selected={table.selected.includes(row.id)}
                             onSelectRow={() => table.onSelectRow(row.id)}
                             userNames={userNames}
+                            operationPerformedList={operationPerformedList}
                           />
                         ))}
 
