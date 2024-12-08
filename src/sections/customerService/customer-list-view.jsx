@@ -72,6 +72,7 @@ const TABLE_HEAD = [
   },
   { id: 'operationDate', label: 'Operasyon Tarihi', width: calculateWidth('Operasyon Tarihi') },
   { id: 'deliveryDate', label: 'Teslim Tarihi', width: calculateWidth('Teslim Tarihi') },
+  { id: 'invoiceUrl', label: 'Fatura', width: calculateWidth('Fatura') },
   { id: 'notes', label: 'Notlar', width: calculateWidth('Notlar') },
   { id: '', label: '', width: calculateWidth('') },
 ];
