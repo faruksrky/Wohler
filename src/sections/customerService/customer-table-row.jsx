@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 import Dialog from '@mui/material/Dialog';
@@ -51,6 +50,13 @@ export function CustomerTableRow({
       <TableRow hover selected={selected} aria-checked={selected} tabIndex={-1}>
         <TableCell padding="checkbox">
           <Checkbox id={row.id.toString()} checked={selected} onClick={onSelectRow} />
+        </TableCell>
+        <TableCell
+          onDoubleClick={quickEdit.onTrue}
+          style={{ width: calculateWidth(row.id) }}
+          sx={{ whiteSpace: 'nowrap' }}
+        >
+          {row.id}
         </TableCell>
         <TableCell
           onDoubleClick={quickEdit.onTrue}
