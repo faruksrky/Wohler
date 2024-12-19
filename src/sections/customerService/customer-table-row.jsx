@@ -53,6 +53,13 @@ export function CustomerTableRow({
         </TableCell>
         <TableCell
           onDoubleClick={quickEdit.onTrue}
+          style={{ width: calculateWidth(row.id) }}
+          sx={{ whiteSpace: 'nowrap' }}
+        >
+          {row.id}
+        </TableCell>
+        <TableCell
+          onDoubleClick={quickEdit.onTrue}
           style={{ width: calculateWidth(row.customerFirstName) }}
           sx={{ whiteSpace: 'nowrap' }}
         >

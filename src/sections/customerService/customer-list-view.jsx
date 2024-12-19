@@ -51,6 +51,7 @@ const calculateWidth = (content) => {
 };
 
 const TABLE_HEAD = [
+  { id: 'id', label: 'Servis Kayıt', width: calculateWidth('Servis Kayıt') },
   { id: 'customerFirstName', label: 'Ad', width: calculateWidth('Ad') },
   { id: 'customerLastName', label: 'Soyad', width: calculateWidth('Soyad') },
   { id: 'phoneNumber', label: 'Telefon', width: calculateWidth('Telefon') },
