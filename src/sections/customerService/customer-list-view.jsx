@@ -44,36 +44,20 @@ import { CustomerTableFiltersResult } from './customer-table-filters-result';
 const STATUS_OPTIONS = [{ value: 'all', label: 'Liste' }, ...SERVICE_COMPLETION_STATUS_OPTIONS];
 
 const calculateWidth = (content) => {
-  // Her karakter için 8px genişlik varsayıyoruz
   const widthPerChar = 8;
-  // İçeriğin genişliğini hesaplıyoruz
   const contentWidth = content.length * widthPerChar;
   // Genişlik, içeriğin genişliği ile belirtilen minimum genişlik arasındaki en büyük değer olmalıdır
-  return Math.max(contentWidth, 200);
+  return Math.max(contentWidth, 300);
 };
 
 const TABLE_HEAD = [
   { id: 'customerFirstName', label: 'Ad', width: calculateWidth('Ad') },
   { id: 'customerLastName', label: 'Soyad', width: calculateWidth('Soyad') },
   { id: 'phoneNumber', label: 'Telefon', width: calculateWidth('Telefon') },
-  { id: 'emailAddress', label: 'E-Posta', width: calculateWidth('E-Posta') },
-  { id: 'address', label: 'Adres', width: calculateWidth('Adres') },
   { id: 'productName', label: 'Ürün Adı', width: calculateWidth('Ürün Adı') },
   { id: 'faultDescription', label: 'Arıza Tanımı', width: calculateWidth('Arıza Tanımı') },
-  { id: 'faultDate', label: 'Arıza Tarihi', width: calculateWidth('Arıza Tarihi') },
   { id: 'servicePersonnel', label: 'Servis Personeli', width: calculateWidth('Servis Personeli') },
-  { id: 'operationPerformed', label: 'Yapılan İşlem', width: calculateWidth('Yapılan İşlem') },
-  { id: 'warrantyStatus', label: 'Garanti Durumu', width: calculateWidth('Garanti Durumu') },
-  { id: 'cargoStatus', label: 'Kargo Durumu', width: calculateWidth('Kargo Durumu') },
-  {
-    id: 'serviceCompletionStatus',
-    label: 'Servis Tamamlanma Durumu',
-    width: calculateWidth('Servis Tamamlanma Durum'),
-  },
-  { id: 'operationDate', label: 'Operasyon Tarihi', width: calculateWidth('Operasyon Tarihi') },
-  { id: 'deliveryDate', label: 'Teslim Tarihi', width: calculateWidth('Teslim Tarihi') },
   { id: 'invoiceUrl', label: 'Fatura', width: calculateWidth('Fatura') },
-  { id: 'notes', label: 'Notlar', width: calculateWidth('Notlar') },
   { id: '', label: '', width: calculateWidth('') },
 ];
 
