@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Stack from '@mui/material/Stack';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
@@ -75,20 +74,6 @@ export function CustomerTableRow({
         </TableCell>
         <TableCell
           onDoubleClick={quickEdit.onTrue}
-          style={{ width: calculateWidth(row.emailAddress) }}
-          sx={{ whiteSpace: 'nowrap' }}
-        >
-          {row.emailAddress}
-        </TableCell>
-        <TableCell
-          onDoubleClick={quickEdit.onTrue}
-          style={{ width: calculateWidth(row.address) }}
-          sx={{ whiteSpace: 'nowrap' }}
-        >
-          {row.address}
-        </TableCell>
-        <TableCell
-          onDoubleClick={quickEdit.onTrue}
           style={{ width: calculateWidth(row.productName) }}
           sx={{ whiteSpace: 'nowrap' }}
         >
@@ -103,59 +88,10 @@ export function CustomerTableRow({
         </TableCell>
         <TableCell
           onDoubleClick={quickEdit.onTrue}
-          style={{ width: calculateWidth(row.faultDate) }}
-          sx={{ whiteSpace: 'nowrap' }}
-        >
-          {row.faultDate}
-        </TableCell>
-        <TableCell
-          onDoubleClick={quickEdit.onTrue}
           style={{ width: calculateWidth(row.servicePersonnel) }}
           sx={{ whiteSpace: 'nowrap' }}
         >
           {row.servicePersonnel}
-        </TableCell>
-        <TableCell
-          onDoubleClick={quickEdit.onTrue}
-          style={{ width: calculateWidth(row.operationPerformed) }}
-          sx={{ whiteSpace: 'nowrap' }}
-        >
-          {row.operationPerformed}
-        </TableCell>
-        <TableCell
-          onDoubleClick={quickEdit.onTrue}
-          style={{ width: calculateWidth(row.warrantyStatus) }}
-          sx={{ whiteSpace: 'nowrap' }}
-        >
-          {row.warrantyStatus}
-        </TableCell>
-        <TableCell
-          onDoubleClick={quickEdit.onTrue}
-          style={{ width: calculateWidth(row.cargoStatus) }}
-          sx={{ whiteSpace: 'nowrap' }}
-        >
-          {row.cargoStatus}
-        </TableCell>
-        <TableCell
-          onDoubleClick={quickEdit.onTrue}
-          style={{ width: calculateWidth(row.serviceCompletionStatus) }}
-          sx={{ whiteSpace: 'nowrap' }}
-        >
-          {row.serviceCompletionStatus}
-        </TableCell>
-        <TableCell
-          onDoubleClick={quickEdit.onTrue}
-          style={{ width: calculateWidth(row.operationDate) }}
-          sx={{ whiteSpace: 'nowrap' }}
-        >
-          {row.operationDate}
-        </TableCell>
-        <TableCell
-          onDoubleClick={quickEdit.onTrue}
-          style={{ width: calculateWidth(row.deliveryDate) }}
-          sx={{ whiteSpace: 'nowrap' }}
-        >
-          {row.deliveryDate}
         </TableCell>
         <TableCell
           onDoubleClick={quickEdit.onTrue}
@@ -167,14 +103,6 @@ export function CustomerTableRow({
               <Iconify icon="solar:eye-bold" />
             </IconButton>
           </Tooltip>
-        </TableCell>
-
-        <TableCell
-          onDoubleClick={quickEdit.onTrue}
-          style={{ width: calculateWidth(row.notes) }}
-          sx={{ whiteSpace: 'nowrap' }}
-        >
-          {row.notes}
         </TableCell>
       </TableRow>
 
