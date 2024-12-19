@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
-import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
@@ -98,36 +97,7 @@ export function CustomerTableToolbar({ filters, options, onResetPage }) {
         anchorEl={popover.anchorEl}
         onClose={popover.onClose}
         slotProps={{ arrow: { placement: 'right-top' } }}
-      >
-        <MenuList>
-          <MenuItem
-            onClick={() => {
-              popover.onClose();
-            }}
-          >
-            <Iconify icon="solar:printer-minimalistic-bold" />
-            Print
-          </MenuItem>
-
-          <MenuItem
-            onClick={() => {
-              popover.onClose();
-            }}
-          >
-            <Iconify icon="solar:import-bold" />
-            Import
-          </MenuItem>
-
-          <MenuItem
-            onClick={() => {
-              popover.onClose();
-            }}
-          >
-            <Iconify icon="solar:export-bold" />
-            Export
-          </MenuItem>
-        </MenuList>
-      </CustomPopover>
+      />   
     </>
   );
 }
