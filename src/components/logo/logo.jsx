@@ -30,7 +30,7 @@ export const Logo = forwardRef(
     <Box
       alt="Single logo"
       component="img"
-      src={`${CONFIG.assetsDir}/logo/logo-direct.svg`}
+      src={`${CONFIG.assetsDir}/logo/logo-wohler-smallest.png`}
       width="100%"
       height="100%"
     />
@@ -178,8 +178,8 @@ export const Logo = forwardRef(
     );
 */
     const baseSize = {
-      width: width ?? 90,
-      height: height ?? 40,
+      width: width ?? 150,
+      height: height ?? 25,
       ...(!isSingle && {
         width: width ?? 102,
         height: height ?? 36,

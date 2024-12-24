@@ -17,6 +17,8 @@ export const signInWithPassword = async ({ username, password }) => {
     );
 
     try {
+      console.log("CONFIG.loginUrl",CONFIG.loginUrl);
+      console.log("params",params);
       const res = await axios.post(CONFIG.loginUrl, params, 
       {
         headers: {

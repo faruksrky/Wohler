@@ -16,9 +16,9 @@ export function Section({
   method,
   layoutQuery,
   methods,
-  title = 'Direct Nexus',
-  imgUrl = `${CONFIG.assetsDir}/assets/illustrations/illustration-techguy.webp`,
-  subtitle = 'Sağlığınız kontrol altında',
+  title = 'WOHLER',
+  imgUrl = `${CONFIG.assetsDir}/assets/illustrations/illustration-wohlertech.webp`,
+  subtitle = 'Sağlığınız Wohler İle Güvende!',
   ...other
 }) {
   const theme = useTheme();

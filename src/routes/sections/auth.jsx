@@ -26,7 +26,7 @@ const authJwt = {
       path: 'sign-in',
       element: (
         <GuestGuard>
-          <AuthSplitLayout section={{ title: 'Direct Nexus' }}>
+          <AuthSplitLayout section={{ title: 'WOHLER' }}>
             <Jwt.SignInPage />
           </AuthSplitLayout>
         </GuestGuard>

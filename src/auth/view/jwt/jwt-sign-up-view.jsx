@@ -127,8 +127,8 @@ export function JwtSignUpView() {
   return (
     <>
       <FormHead
-        title="Direct Nexus Hesap Oluşturma"
-        description="Hesap oluşturarak Direct Nexus platformunu kullanmaya başlayabilirsiniz."
+        title="Wohler Hesap Oluşturma"
+        description="Hesap oluşturarak Wohler platformunu kullanmaya başlayabilirsiniz."
         sx={{ textAlign: { xs: 'center', md: 'left' } }}
       />
 
