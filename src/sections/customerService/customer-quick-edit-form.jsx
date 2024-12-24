@@ -182,6 +182,7 @@ export function CustomerQuickEditForm({
 
               <Field.Text name="productName" label="Ürün Adı" />
               <Field.DatePicker name="faultDate" label="Arıza Tarihi" />
+
               <Field.Text
                 name="faultDescription"
                 label="Arıza Tanımı"
