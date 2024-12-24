@@ -70,14 +70,14 @@ export function CustomerQuickEditForm({
       address: currentCustomer?.address || '',
       productName: currentCustomer?.productName || '',
       faultDescription: currentCustomer?.faultDescription || '',
-      faultDate: currentCustomer?.faultDate || '',
+      faultDate: currentCustomer?.faultDate || new Date().toISOString().split('T')[0],
       servicePersonnel: currentCustomer?.servicePersonnel || '',
       serviceCompletionStatus: currentCustomer?.serviceCompletionStatus || '',
       operationPerformed: currentCustomer?.operationPerformed || '',
-      operationDate: currentCustomer?.operationDate || '',
+      operationDate: currentCustomer?.operationDate || new Date().toISOString().split('T')[0],
       warrantyStatus: currentCustomer?.warrantyStatus || '',
       cargoStatus: currentCustomer?.cargoStatus || '',
-      deliveryDate: currentCustomer?.deliveryDate || '',
+      deliveryDate: currentCustomer?.deliveryDate || new Date().toISOString().split('T')[0],
       notes: currentCustomer?.notes || '',
     }),
     [currentCustomer]
@@ -109,7 +109,6 @@ export function CustomerQuickEditForm({
       'emailAddress',
       'address',
       'productName',
-      'faultDate',
     ];
 
     const updatedData = Object.keys(data)
@@ -182,7 +181,8 @@ export function CustomerQuickEditForm({
               />
 
               <Field.Text name="productName" label="Ürün Adı" />
-              <Field.DatePicker name="faultDate" label="Arıza Tarihi" readOnly />
+              <Field.DatePicker name="faultDate" label="Arıza Tarihi" />
+
               <Field.Text
                 name="faultDescription"
                 label="Arıza Tanımı"

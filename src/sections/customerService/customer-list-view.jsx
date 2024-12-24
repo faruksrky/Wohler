@@ -220,7 +220,7 @@ export function CustomerServiceListView() {
                 <Scrollbar>
                   <Table
                     size={table.dense ? 'small' : 'medium'}
-                    sx={{ minWidth: 1500, width: '100%' }}
+                    sx={{ minWidth: 1000, width: '100%' }}
                   >
                     <TableHeadCustom
                       order={table.order}
@@ -309,9 +309,12 @@ function applyFilter({ inputData, comparator, filters }) {
 
   if (name) {
     inputData = inputData.filter(
-      (user) => user.customerFirstName.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (user) =>
+        user.customerFirstName.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        user.customerLastName.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
-  }
+}
+
 
   if (status !== 'all') {
     inputData = inputData.filter((user) => user.serviceCompletionStatus === status);
