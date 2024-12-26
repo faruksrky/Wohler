@@ -99,7 +99,6 @@ export function UserNewEditForm({ currentUser }) {
       setOpen(true);
       reset();
     } catch (error) {
-      console.log('error', error);
       if (error.response && error.response.status === 409) {
         setMessage('Bu e-posta adresi veya kullanıcı adı zaten kullanımda.');
       } else {
